@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Ctext%20y='13'%20font-size='13'%3E%F0%9F%9A%A2%3C/text%3E%3C/svg%3E" />
+<title>Titanic Survival Prediction &middot; Jishnu Vardhan Kancharla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;600;800&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <h1 class="title">
+    <span class="title-typed" id="typed"></span><span class="caret">|</span>
+  </h1>
+  <p class="subtitle">Will they make it? A stacking ensemble of <b>Logistic Regression + Random Forest</b> refined by <b>XGBoost</b> predicts each passenger's fate.</p>
+  <button class="btn-scroll" id="scrollBtn" type="button">
+    <span>Explore the model</span>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
+</header>
+
+<!-- ============ STATS STRIP ============ -->
+<section class="stats" id="stats">
+  <div class="stat-card tilt-card" data-anim="rise">
+    <span class="stat-icon">🚢</span>
+    <div class="stat-value"><span class="counter" data-target="891" data-suffix="">0</span></div>
+    <div class="stat-label">Passengers Analysed</div>
+  </div>
+  <div class="stat-card tilt-card" data-anim="rise">
+    <span class="stat-icon">🧊</span>
+    <div class="stat-value"><span class="counter" data-target="62" data-suffix="%">0</span></div>
+    <div class="stat-label">Did Not Survive</div>
+  </div>
+  <div class="stat-card tilt-card" data-anim="rise">
+    <span class="stat-icon">📈</span>
+    <div class="stat-value"><span class="counter" data-target="0" data-decimals="2" data-suffix="%">0</span></div>
+    <div class="stat-label">Test Accuracy</div>
+  </div>
+  <div class="stat-card tilt-card" data-anim="rise">
+    <span class="stat-icon">🎯</span>
+    <div class="stat-value"><span class="counter" data-target="0" data-decimals="2" data-suffix="%">0</span></div>
+    <div class="stat-label">10-Fold CV Score</div>
+  </div>
+</section>
+
+<!-- ============ CHARTS ============ -->
+<section class="charts">
+  <div class="tilt-card chart-card donut-card" data-anim="fade">
+    <h2>Survival Rate</h2>
+    <div class="donut-wrap">
+      <svg class="donut" viewBox="0 0 200 200">
+        <circle class="donut-track" cx="100" cy="100" r="78" />
+        <circle class="donut-fill" id="donutFill" cx="100" cy="100" r="78" />
+      </svg>
+      <div class="donut-center">
+        <span class="donut-num" id="donutNum">0%</span>
+        <span class="donut-cap">Survived</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tilt-card chart-card" data-anim="fade">
+    <h2>Survival by Class</h2>
+    <div class="bars" id="pclassBars"></div>
+  </div>
+
+  <div class="tilt-card chart-card" data-anim="fade">
+    <h2>Survival by Age Group</h2>
+    <div class="bars" id="ageBars"></div>
+  </div>
+
+  <div class="tilt-card chart-card" data-anim="fade">
+    <h2>Top Model Features</h2>
+    <div class="h-bars" id="importanceBars"></div>
+  </div>
+</section>
+
+<!-- ============ PREDICTOR ============ -->
+<section class="predictor" id="predictor">
+  <div class="predictor-head" data-anim="fade">
+    <h2>Predict a Passenger</h2>
+    <p>Enter the details below and watch the model decide, live.</p>
+  </div>
+
+  <div class="predictor-grid">
+    <form class="tilt-card form-card" id="predictForm" data-anim="rise">
+      <div class="field">
+        <label for="name">Passenger Name</label>
+        <input type="text" id="name" placeholder="e.g. Mr. John Smith" />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="sex">Sex</label>
+          <select id="sex">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="age">Age</label>
+          <input type="number" id="age" min="0" max="100" value="28" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="pclass">Passenger Class</label>
+          <select id="pclass">
+            <option value="1">1st &mdash; Upper</option>
+            <option value="2">2nd &mdash; Middle</option>
+            <option value="3" selected>3rd &mdash; Lower</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fare">Ticket Fare ($)</label>
+          <input type="number" id="fare" min="0" step="0.01" value="8.05" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="sibsp">Siblings / Spouse</label>
+          <input type="number" id="sibsp" min="0" max="10" value="0" />
+        </div>
+        <div class="field">
+          <label for="parch">Parents / Children</label>
+          <input type="number" id="parch" min="0" max="10" value="0" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="embarked">Port of Embarkation</label>
+          <select id="embarked">
+            <option value="S">Southampton</option>
+            <option value="C">Cherbourg</option>
+            <option value="Q">Queenstown</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="check" for="cabin">
+            <input type="checkbox" id="cabin" />
+            <span class="check-box"></span>
+            <span>Had a Cabin Assigned</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-predict" id="predictBtn" type="submit">
+        <span class="btn-text">Run Prediction</span>
+        <span class="btn-loader" aria-hidden="true"></span>
+      </button>
+    </form>
+
+    <div class="tilt-card result-card" id="resultCard" data-anim="rise">
+      <div class="scan-overlay" id="scanOverlay">
+        <div class="scanner"></div>
+        <p>Analysing passenger data&hellip;</p>
+      </div>
+
+      <div class="result-empty" id="resultEmpty">
+        <div class="ship-silhouette">⚓</div>
+        <p>Awaiting a passenger&hellip;<br/>Submit the form to set sail.</p>
+      </div>
+
+      <div class="result-body" id="resultBody">
+        <p class="result-cap">MODEL VERDICT</p>
+        <div class="result-badge" id="resultBadge">SURVIVED</div>
+        <div class="gauge">
+          <div class="gauge-bar"><span id="gaugeFill"></span></div>
+          <div class="gauge-labels"><span>0</span><span>100</span></div>
+        </div>
+        <p class="result-prob" id="resultProb">Confidence: 0%</p>
+        <div class="result-detail" id="resultDetail"></div>
+        <div class="chart-figure" id="chartFigure" hidden>
+          <img id="resultChart" alt="Survival probability chart" />
+        </div>
+        <button class="btn-again" id="againBtn" type="button">↻ Try Another Passenger</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built with <span class="heart">&#9829;</span> by <b>Jishnu Vardhan Kancharla</b> &middot; CodSoft Internship Task 1</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

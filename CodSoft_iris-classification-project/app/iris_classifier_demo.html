@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iris Specimen Classifier — CodeAlpha ML Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#131F19;
+    --bg-deep-2:#0D1712;
+    --paper:#EBE4D2;
+    --paper-2:#F4EFE1;
+    --ink:#20291F;
+    --ink-soft:#4B5346;
+    --iris:#6C4F94;
+    --iris-light:#9B7FC7;
+    --iris-dark:#4B3768;
+    --sage:#7C9473;
+    --sage-dark:#526B49;
+    --gold:#B08D57;
+    --line:#C9BFA3;
+    --setosa:#7C9473;
+    --versicolor:#B08D57;
+    --virginica:#6C4F94;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(124,148,115,0.10), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(108,79,148,0.14), transparent 45%),
+      var(--bg-deep);
+    font-family:'Inter',sans-serif;
+    color:var(--paper);
+    padding:36px 20px 56px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;}
+
+  header.masthead{
+    text-align:center;
+    padding-bottom:22px;
+    margin-bottom:30px;
+    border-bottom:1px solid rgba(235,228,210,0.18);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--sage);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(30px,4.4vw,46px);
+    margin:0 0 8px;
+    color:var(--paper-2);
+    letter-spacing:-0.01em;
+  }
+  h1 em{font-style:italic;color:var(--iris-light);}
+  .sub{
+    font-size:14.5px;
+    color:#C7CABE;
+    max-width:560px;
+    margin:0 auto;
+    line-height:1.55;
+  }
+  .accbadge{
+    display:inline-flex;
+    gap:18px;
+    margin-top:16px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:#A9AE9E;
+  }
+  .accbadge b{color:var(--sage);font-weight:500;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:340px minmax(540px, 1fr);
+    gap:26px;
+    align-items:stretch;
+  }
+  @media (max-width:840px){ .grid{grid-template-columns:1fr;} }
+
+  .panel,
+  .specimen-panel{
+    height:100%;
+    align-self:stretch;
+  }
+
+  .panel{
+    background:var(--paper);
+    border-radius:6px;
+    padding:26px 24px 28px;
+    color:var(--ink);
+    box-shadow:0 20px 46px -18px rgba(0,0,0,0.55);
+    position:relative;
+  }
+  .panel::before{
+    content:"";
+    position:absolute; inset:8px;
+    border:1px solid rgba(32,41,31,0.14);
+    border-radius:3px;
+    pointer-events:none;
+  }
+  .panel-title{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:19px;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .panel-note{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:0 0 22px;
+    line-height:1.5;
+  }
+
+  .field{margin-bottom:20px;}
+  .field:last-child{margin-bottom:0;}
+  .field-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:8px;
+  }
+  .field-label{
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink);
+  }
+  .field-label small{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:400;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    margin-top:2px;
+  }
+  .field-val{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;
+    font-weight:500;
+    color:var(--iris-dark);
+    background:rgba(108,79,148,0.10);
+    padding:2px 8px;
+    border-radius:3px;
+  }
+  input[type=range]{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    height:4px;
+    background:var(--line);
+    border-radius:2px;
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--iris);
+    border:2px solid var(--paper-2);
+    box-shadow:0 1px 4px rgba(0,0,0,0.35);
+    cursor:pointer;
+    margin-top:-6px;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:16px;height:16px;border-radius:50%;
+    background:var(--iris);border:2px solid var(--paper-2);
+    box-shadow:0 1px 4px rgba(0,0,0,0.35);cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{
+    height:4px;border-radius:2px;
+  }
+  .ticks{
+    display:flex;justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;color:var(--ink-soft);
+    margin-top:5px;opacity:0.75;
+  }
+
+  .presets{
+    display:flex;gap:8px;flex-wrap:wrap;
+    margin-top:24px;padding-top:20px;
+    border-top:1px dashed var(--line);
+  }
+  .preset-btn{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.02em;
+    padding:6px 10px;
+    border-radius:3px;
+    border:1px solid var(--line);
+    background:var(--paper-2);
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all 0.15s ease;
+  }
+  .preset-btn:hover{border-color:var(--iris);color:var(--iris-dark);}
+
+  .specimen-panel{
+    background:var(--paper);
+    border-radius:6px;
+    padding:24px 26px 28px;
+    color:var(--ink);
+    box-shadow:0 20px 46px -18px rgba(0,0,0,0.55);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+  }
+  .specimen-panel::before{
+    content:"";position:absolute; inset:8px;
+    border:1px solid rgba(32,41,31,0.14);
+    border-radius:3px;pointer-events:none;
+  }
+  .specimen-top{
+    display:flex;
+    gap:26px;
+    align-items:stretch;
+  }
+  @media (max-width:640px){ .specimen-top{flex-direction:column;} }
+
+  .flower-stage{
+    flex:1;
+    min-width:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:radial-gradient(circle at 50% 40%, rgba(108,79,148,0.06), transparent 65%);
+    border-radius:5px;
+  }
+  #flowerSvg{width:100%;max-width:300px;height:auto;}
+
+  .stamp-col{
+    width:230px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:16px;
+  }
+  @media (max-width:640px){ .stamp-col{width:100%;} }
+
+  .taxo-eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .species-name{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:27px;
+    line-height:1.15;
+    margin:4px 0 2px;
+    transition:color 0.3s ease;
+  }
+  .species-common{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+
+  .vote-row{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .vote-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+  }
+  .vote-label{width:76px;color:var(--ink-soft);flex-shrink:0;}
+  .vote-bar-bg{
+    flex:1;height:6px;background:rgba(32,41,31,0.10);
+    border-radius:3px;overflow:hidden;
+  }
+  .vote-bar-fill{
+    height:100%;border-radius:3px;
+    transition:width 0.4s cubic-bezier(0.4,0,0.2,1);
+    width:0%;
+  }
+  .vote-pct{width:32px;text-align:right;color:var(--ink-soft);flex-shrink:0;}
+
+  .stamp{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    align-self:flex-start;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:5px 10px;
+    border:1.5px solid var(--sage-dark);
+    border-radius:3px;
+    color:var(--sage-dark);
+    transform:rotate(-2deg);
+    animation:stampIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes stampIn{
+    0%{transform:rotate(-2deg) scale(0.7);opacity:0;}
+    100%{transform:rotate(-2deg) scale(1);opacity:1;}
+  }
+
+  .divider{
+    border:none;border-top:1px dashed var(--line);
+    margin:22px 0;
+  }
+
+  .neighbors-title{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--ink-soft);margin-bottom:10px;
+  }
+  .neighbor-list{
+    display:flex;gap:10px;flex-wrap:wrap;
+  }
+  .neighbor-chip{
+    flex:1;min-width:150px;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:9px 11px;
+    font-size:11.5px;
+  }
+  .neighbor-chip .nsp{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:13px;margin-bottom:2px;display:block;
+  }
+  .neighbor-chip .ndist{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;color:var(--ink-soft);
+  }
+
+  footer.notes{
+    margin-top:26px;
+    background:rgba(235,228,210,0.05);
+    border:1px solid rgba(235,228,210,0.14);
+    border-radius:6px;
+    padding:20px 24px;
+  }
+  .notes-title{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--sage);margin-bottom:14px;
+  }
+  .notes-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+  }
+  .note-block b{
+    display:block;font-size:12.5px;color:var(--paper-2);margin-bottom:6px;font-weight:500;
+  }
+  .imp-row{
+    display:flex;align-items:center;gap:8px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#C7CABE;
+    margin-bottom:5px;
+  }
+  .imp-name{width:82px;flex-shrink:0;}
+  .imp-bar-bg{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
+  .imp-bar-fill{height:100%;background:var(--iris-light);border-radius:3px;}
+  .note-text{font-size:12px;color:#B9BCAE;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Species Classification</div>
+    <h1>Iris <em>Specimen</em> Classifier</h1>
+    <p class="sub">Adjust the sepal and petal measurements to see the specimen redrawn live and classified in real time — powered by a support vector machine trained on the classic 150-sample Iris dataset.</p>
+    <div class="accbadge">
+      <span>Model: <b id="modelNameBadge">—</b></span>
+      <span>10-fold CV accuracy: <b id="cvAccBadge">—</b></span>
+      <span>Trained on <b>150</b> specimens</span>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <div class="panel">
+      <p class="panel-title">Field measurements</p>
+      <p class="panel-note">All values in centimetres, matching the original Fisher (1936) Iris dataset conventions.</p>
+
+      <div class="field">
+        <div class="field-head">
+          <span class="field-label">Sepal length<small>Falls · overall length</small></span>
+          <span class="field-val" id="val-sl">5.8 cm</span>
+        </div>
+        <input type="range" id="sl" min="4.3" max="7.9" step="0.1" value="5.8" aria-label="Sepal length measurement">
+        <div class="ticks"><span>4.3</span><span>7.9</span></div>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <span class="field-label">Sepal width<small>Falls · overall breadth</small></span>
+          <span class="field-val" id="val-sw">3.0 cm</span>
+        </div>
+        <input type="range" id="sw" min="2.0" max="4.4" step="0.1" value="3.0" aria-label="Sepal width measurement">
+        <div class="ticks"><span>2.0</span><span>4.4</span></div>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <span class="field-label">Petal length<small>Standards · overall length</small></span>
+          <span class="field-val" id="val-pl">3.8 cm</span>
+        </div>
+        <input type="range" id="pl" min="1.0" max="6.9" step="0.1" value="3.8" aria-label="Petal length measurement">
+        <div class="ticks"><span>1.0</span><span>6.9</span></div>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <span class="field-label">Petal width<small>Standards · overall breadth</small></span>
+          <span class="field-val" id="val-pw">1.2 cm</span>
+        </div>
+        <input type="range" id="pw" min="0.1" max="2.5" step="0.1" value="1.2" aria-label="Petal width measurement">
+        <div class="ticks"><span>0.1</span><span>2.5</span></div>
+      </div>
+
+      <div class="presets">
+        <button class="preset-btn" data-p="setosa">Typical setosa</button>
+        <button class="preset-btn" data-p="versicolor">Typical versicolor</button>
+        <button class="preset-btn" data-p="virginica">Typical virginica</button>
+        <button class="preset-btn" data-p="random">Randomize</button>
+      </div>
+    </div>
+
+    <div class="specimen-panel">
+      <div class="specimen-top">
+        <div class="flower-stage">
+          <svg id="flowerSvg" viewBox="0 0 300 300"></svg>
+        </div>
+        <div class="stamp-col">
+          <div>
+            <div class="taxo-eyebrow">Genus Iris · predicted species</div>
+            <div class="species-name" id="speciesName">—</div>
+            <div class="species-common" id="speciesCommon">—</div>
+          </div>
+          <div class="vote-row" id="voteRow"></div>
+          <div class="stamp" id="stampBadge">identified</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div>
+        <div class="neighbors-title">Nearest known specimens (from training data)</div>
+        <div class="neighbor-list" id="neighborList"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="notes">
+    <div class="notes-title">Model notes</div>
+    <div class="notes-grid">
+      <div class="note-block">
+        <b>Feature importance</b>
+        <div id="importanceBlock"></div>
+      </div>
+      <div class="note-block">
+        <b>Why an SVM</b>
+        <p class="note-text">Six algorithms were compared with 10-fold stratified cross-validation (logistic regression, KNN, SVM, decision tree, random forest). A linear-kernel SVM generalised best, and its exact learned weights are embedded directly in this page — every prediction above comes from the real trained model, not an approximation.</p>
+      </div>
+      <div class="note-block">
+        <b>Where errors happen</b>
+        <p class="note-text"><i>Setosa</i> is linearly separable and classified with 100% accuracy. Almost all model error occurs between <i>versicolor</i> and <i>virginica</i>, whose petal measurements overlap at the boundary — visible in the dataset itself, not a model weakness.</p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const MODEL = {
+  classes: ["setosa","versicolor","virginica"],
+  coef: [
+    [-0.26364242, 0.41965507, -0.60224655, -0.56174675],
+    [-0.2186122,  0.13722426, -0.46572083, -0.42841919],
+    [-0.0894849,  0.24275786, -0.96633399, -1.29159321]
+  ],
+  intercept: [-0.84086143, -0.27373943, 1.61631357],
+  pairs: [[0,1],[0,2],[1,2]],
+  scalerMean: [5.84333333, 3.054, 3.75866667, 1.19866667],
+  scalerScale: [0.82530129, 0.43214658, 1.75852918, 0.76061262],
+  cvAccuracy: 0.9667,
+  modelName: "Support Vector Machine (linear kernel)"
+};
+
+const SPECIES_META = {
+  setosa: { common: "Iris setosa · bristle-pointed iris", color: "#7C9473" },
+  versicolor: { common: "Iris versicolor · blue flag iris", color: "#B08D57" },
+  virginica: { common: "Iris virginica · Virginia iris", color: "#6C4F94" }
+};
+
+const FEATURE_STATS = {
+  sepal_length: {min:4.3, max:7.9},
+  sepal_width:  {min:2.0, max:4.4},
+  petal_length: {min:1.0, max:6.9},
+  petal_width:  {min:0.1, max:2.5}
+};
+
+const FEATURE_IMPORTANCE = [
+  ["petal_length", 0.4503],
+  ["petal_width", 0.4095],
+  ["sepal_length", 0.1215],
+  ["sepal_width", 0.0187]
+];
+
+const DATASET = [{"sepal_length": 5.1, "sepal_width": 3.5, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.9, "sepal_width": 3.0, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.7, "sepal_width": 3.2, "petal_length": 1.3, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.6, "sepal_width": 3.1, "petal_length": 1.5, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.6, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.4, "sepal_width": 3.9, "petal_length": 1.7, "petal_width": 0.4, "species": "setosa"}, {"sepal_length": 4.6, "sepal_width": 3.4, "petal_length": 1.4, "petal_width": 0.3, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.4, "petal_length": 1.5, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.4, "sepal_width": 2.9, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.9, "sepal_width": 3.1, "petal_length": 1.5, "petal_width": 0.1, "species": "setosa"}, {"sepal_length": 5.4, "sepal_width": 3.7, "petal_length": 1.5, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.8, "sepal_width": 3.4, "petal_length": 1.6, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.8, "sepal_width": 3.0, "petal_length": 1.4, "petal_width": 0.1, "species": "setosa"}, {"sepal_length": 4.3, "sepal_width": 3.0, "petal_length": 1.1, "petal_width": 0.1, "species": "setosa"}, {"sepal_length": 5.8, "sepal_width": 4.0, "petal_length": 1.2, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.7, "sepal_width": 4.4, "petal_length": 1.5, "petal_width": 0.4, "species": "setosa"}, {"sepal_length": 5.4, "sepal_width": 3.9, "petal_length": 1.3, "petal_width": 0.4, "species": "setosa"}, {"sepal_length": 5.1, "sepal_width": 3.5, "petal_length": 1.4, "petal_width": 0.3, "species": "setosa"}, {"sepal_length": 5.7, "sepal_width": 3.8, "petal_length": 1.7, "petal_width": 0.3, "species": "setosa"}, {"sepal_length": 5.1, "sepal_width": 3.8, "petal_length": 1.5, "petal_width": 0.3, "species": "setosa"}, {"sepal_length": 5.4, "sepal_width": 3.4, "petal_length": 1.7, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.1, "sepal_width": 3.7, "petal_length": 1.5, "petal_width": 0.4, "species": "setosa"}, {"sepal_length": 4.6, "sepal_width": 3.6, "petal_length": 1.0, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.1, "sepal_width": 3.3, "petal_length": 1.7, "petal_width": 0.5, "species": "setosa"}, {"sepal_length": 4.8, "sepal_width": 3.4, "petal_length": 1.9, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.0, "petal_length": 1.6, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.4, "petal_length": 1.6, "petal_width": 0.4, "species": "setosa"}, {"sepal_length": 5.2, "sepal_width": 3.5, "petal_length": 1.5, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.2, "sepal_width": 3.4, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.7, "sepal_width": 3.2, "petal_length": 1.6, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.8, "sepal_width": 3.1, "petal_length": 1.6, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.4, "sepal_width": 3.4, "petal_length": 1.5, "petal_width": 0.4, "species": "setosa"}, {"sepal_length": 5.2, "sepal_width": 4.1, "petal_length": 1.5, "petal_width": 0.1, "species": "setosa"}, {"sepal_length": 5.5, "sepal_width": 4.2, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.9, "sepal_width": 3.1, "petal_length": 1.5, "petal_width": 0.1, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.2, "petal_length": 1.2, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.5, "sepal_width": 3.5, "petal_length": 1.3, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.9, "sepal_width": 3.1, "petal_length": 1.5, "petal_width": 0.1, "species": "setosa"}, {"sepal_length": 4.4, "sepal_width": 3.0, "petal_length": 1.3, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.1, "sepal_width": 3.4, "petal_length": 1.5, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.5, "petal_length": 1.3, "petal_width": 0.3, "species": "setosa"}, {"sepal_length": 4.5, "sepal_width": 2.3, "petal_length": 1.3, "petal_width": 0.3, "species": "setosa"}, {"sepal_length": 4.4, "sepal_width": 3.2, "petal_length": 1.3, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.5, "petal_length": 1.6, "petal_width": 0.6, "species": "setosa"}, {"sepal_length": 5.1, "sepal_width": 3.8, "petal_length": 1.9, "petal_width": 0.4, "species": "setosa"}, {"sepal_length": 4.8, "sepal_width": 3.0, "petal_length": 1.4, "petal_width": 0.3, "species": "setosa"}, {"sepal_length": 5.1, "sepal_width": 3.8, "petal_length": 1.6, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 4.6, "sepal_width": 3.2, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.3, "sepal_width": 3.7, "petal_length": 1.5, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 5.0, "sepal_width": 3.3, "petal_length": 1.4, "petal_width": 0.2, "species": "setosa"}, {"sepal_length": 7.0, "sepal_width": 3.2, "petal_length": 4.7, "petal_width": 1.4, "species": "versicolor"}, {"sepal_length": 6.4, "sepal_width": 3.2, "petal_length": 4.5, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 6.9, "sepal_width": 3.1, "petal_length": 4.9, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 5.5, "sepal_width": 2.3, "petal_length": 4.0, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 6.5, "sepal_width": 2.8, "petal_length": 4.6, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 5.7, "sepal_width": 2.8, "petal_length": 4.5, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 6.3, "sepal_width": 3.3, "petal_length": 4.7, "petal_width": 1.6, "species": "versicolor"}, {"sepal_length": 4.9, "sepal_width": 2.4, "petal_length": 3.3, "petal_width": 1.0, "species": "versicolor"}, {"sepal_length": 6.6, "sepal_width": 2.9, "petal_length": 4.6, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 5.2, "sepal_width": 2.7, "petal_length": 3.9, "petal_width": 1.4, "species": "versicolor"}, {"sepal_length": 5.0, "sepal_width": 2.0, "petal_length": 3.5, "petal_width": 1.0, "species": "versicolor"}, {"sepal_length": 5.9, "sepal_width": 3.0, "petal_length": 4.2, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 6.0, "sepal_width": 2.2, "petal_length": 4.0, "petal_width": 1.0, "species": "versicolor"}, {"sepal_length": 6.1, "sepal_width": 2.9, "petal_length": 4.7, "petal_width": 1.4, "species": "versicolor"}, {"sepal_length": 5.6, "sepal_width": 2.9, "petal_length": 3.6, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 6.7, "sepal_width": 3.1, "petal_length": 4.4, "petal_width": 1.4, "species": "versicolor"}, {"sepal_length": 5.6, "sepal_width": 3.0, "petal_length": 4.5, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 5.8, "sepal_width": 2.7, "petal_length": 4.1, "petal_width": 1.0, "species": "versicolor"}, {"sepal_length": 6.2, "sepal_width": 2.2, "petal_length": 4.5, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 5.6, "sepal_width": 2.5, "petal_length": 3.9, "petal_width": 1.1, "species": "versicolor"}, {"sepal_length": 5.9, "sepal_width": 3.2, "petal_length": 4.8, "petal_width": 1.8, "species": "versicolor"}, {"sepal_length": 6.1, "sepal_width": 2.8, "petal_length": 4.0, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 6.3, "sepal_width": 2.5, "petal_length": 4.9, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 6.1, "sepal_width": 2.8, "petal_length": 4.7, "petal_width": 1.2, "species": "versicolor"}, {"sepal_length": 6.4, "sepal_width": 2.9, "petal_length": 4.3, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 6.6, "sepal_width": 3.0, "petal_length": 4.4, "petal_width": 1.4, "species": "versicolor"}, {"sepal_length": 6.8, "sepal_width": 2.8, "petal_length": 4.8, "petal_width": 1.4, "species": "versicolor"}, {"sepal_length": 6.7, "sepal_width": 3.0, "petal_length": 5.0, "petal_width": 1.7, "species": "versicolor"}, {"sepal_length": 6.0, "sepal_width": 2.9, "petal_length": 4.5, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 5.7, "sepal_width": 2.6, "petal_length": 3.5, "petal_width": 1.0, "species": "versicolor"}, {"sepal_length": 5.5, "sepal_width": 2.4, "petal_length": 3.8, "petal_width": 1.1, "species": "versicolor"}, {"sepal_length": 5.5, "sepal_width": 2.4, "petal_length": 3.7, "petal_width": 1.0, "species": "versicolor"}, {"sepal_length": 5.8, "sepal_width": 2.7, "petal_length": 3.9, "petal_width": 1.2, "species": "versicolor"}, {"sepal_length": 6.0, "sepal_width": 2.7, "petal_length": 5.1, "petal_width": 1.6, "species": "versicolor"}, {"sepal_length": 5.4, "sepal_width": 3.0, "petal_length": 4.5, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 6.0, "sepal_width": 3.4, "petal_length": 4.5, "petal_width": 1.6, "species": "versicolor"}, {"sepal_length": 6.7, "sepal_width": 3.1, "petal_length": 4.7, "petal_width": 1.5, "species": "versicolor"}, {"sepal_length": 6.3, "sepal_width": 2.3, "petal_length": 4.4, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 5.6, "sepal_width": 3.0, "petal_length": 4.1, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 5.5, "sepal_width": 2.5, "petal_length": 4.0, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 5.5, "sepal_width": 2.6, "petal_length": 4.4, "petal_width": 1.2, "species": "versicolor"}, {"sepal_length": 6.1, "sepal_width": 3.0, "petal_length": 4.6, "petal_width": 1.4, "species": "versicolor"}, {"sepal_length": 5.8, "sepal_width": 2.6, "petal_length": 4.0, "petal_width": 1.2, "species": "versicolor"}, {"sepal_length": 5.0, "sepal_width": 2.3, "petal_length": 3.3, "petal_width": 1.0, "species": "versicolor"}, {"sepal_length": 5.6, "sepal_width": 2.7, "petal_length": 4.2, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 5.7, "sepal_width": 3.0, "petal_length": 4.2, "petal_width": 1.2, "species": "versicolor"}, {"sepal_length": 5.7, "sepal_width": 2.9, "petal_length": 4.2, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 6.2, "sepal_width": 2.9, "petal_length": 4.3, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 5.1, "sepal_width": 2.5, "petal_length": 3.0, "petal_width": 1.1, "species": "versicolor"}, {"sepal_length": 5.7, "sepal_width": 2.8, "petal_length": 4.1, "petal_width": 1.3, "species": "versicolor"}, {"sepal_length": 6.3, "sepal_width": 3.3, "petal_length": 6.0, "petal_width": 2.5, "species": "virginica"}, {"sepal_length": 5.8, "sepal_width": 2.7, "petal_length": 5.1, "petal_width": 1.9, "species": "virginica"}, {"sepal_length": 7.1, "sepal_width": 3.0, "petal_length": 5.9, "petal_width": 2.1, "species": "virginica"}, {"sepal_length": 6.3, "sepal_width": 2.9, "petal_length": 5.6, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.5, "sepal_width": 3.0, "petal_length": 5.8, "petal_width": 2.2, "species": "virginica"}, {"sepal_length": 7.6, "sepal_width": 3.0, "petal_length": 6.6, "petal_width": 2.1, "species": "virginica"}, {"sepal_length": 4.9, "sepal_width": 2.5, "petal_length": 4.5, "petal_width": 1.7, "species": "virginica"}, {"sepal_length": 7.3, "sepal_width": 2.9, "petal_length": 6.3, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.7, "sepal_width": 2.5, "petal_length": 5.8, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 7.2, "sepal_width": 3.6, "petal_length": 6.1, "petal_width": 2.5, "species": "virginica"}, {"sepal_length": 6.5, "sepal_width": 3.2, "petal_length": 5.1, "petal_width": 2.0, "species": "virginica"}, {"sepal_length": 6.4, "sepal_width": 2.7, "petal_length": 5.3, "petal_width": 1.9, "species": "virginica"}, {"sepal_length": 6.8, "sepal_width": 3.0, "petal_length": 5.5, "petal_width": 2.1, "species": "virginica"}, {"sepal_length": 5.7, "sepal_width": 2.5, "petal_length": 5.0, "petal_width": 2.0, "species": "virginica"}, {"sepal_length": 5.8, "sepal_width": 2.8, "petal_length": 5.1, "petal_width": 2.4, "species": "virginica"}, {"sepal_length": 6.4, "sepal_width": 3.2, "petal_length": 5.3, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 6.5, "sepal_width": 3.0, "petal_length": 5.5, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 7.7, "sepal_width": 3.8, "petal_length": 6.7, "petal_width": 2.2, "species": "virginica"}, {"sepal_length": 7.7, "sepal_width": 2.6, "petal_length": 6.9, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 6.0, "sepal_width": 2.2, "petal_length": 5.0, "petal_width": 1.5, "species": "virginica"}, {"sepal_length": 6.9, "sepal_width": 3.2, "petal_length": 5.7, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 5.6, "sepal_width": 2.8, "petal_length": 4.9, "petal_width": 2.0, "species": "virginica"}, {"sepal_length": 7.7, "sepal_width": 2.8, "petal_length": 6.7, "petal_width": 2.0, "species": "virginica"}, {"sepal_length": 6.3, "sepal_width": 2.7, "petal_length": 4.9, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.7, "sepal_width": 3.3, "petal_length": 5.7, "petal_width": 2.1, "species": "virginica"}, {"sepal_length": 7.2, "sepal_width": 3.2, "petal_length": 6.0, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.2, "sepal_width": 2.8, "petal_length": 4.8, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.1, "sepal_width": 3.0, "petal_length": 4.9, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.4, "sepal_width": 2.8, "petal_length": 5.6, "petal_width": 2.1, "species": "virginica"}, {"sepal_length": 7.2, "sepal_width": 3.0, "petal_length": 5.8, "petal_width": 1.6, "species": "virginica"}, {"sepal_length": 7.4, "sepal_width": 2.8, "petal_length": 6.1, "petal_width": 1.9, "species": "virginica"}, {"sepal_length": 7.9, "sepal_width": 3.8, "petal_length": 6.4, "petal_width": 2.0, "species": "virginica"}, {"sepal_length": 6.4, "sepal_width": 2.8, "petal_length": 5.6, "petal_width": 2.2, "species": "virginica"}, {"sepal_length": 6.3, "sepal_width": 2.8, "petal_length": 5.1, "petal_width": 1.5, "species": "virginica"}, {"sepal_length": 6.1, "sepal_width": 2.6, "petal_length": 5.6, "petal_width": 1.4, "species": "virginica"}, {"sepal_length": 7.7, "sepal_width": 3.0, "petal_length": 6.1, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 6.3, "sepal_width": 3.4, "petal_length": 5.6, "petal_width": 2.4, "species": "virginica"}, {"sepal_length": 6.4, "sepal_width": 3.1, "petal_length": 5.5, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.0, "sepal_width": 3.0, "petal_length": 4.8, "petal_width": 1.8, "species": "virginica"}, {"sepal_length": 6.9, "sepal_width": 3.1, "petal_length": 5.4, "petal_width": 2.1, "species": "virginica"}, {"sepal_length": 6.7, "sepal_width": 3.1, "petal_length": 5.6, "petal_width": 2.4, "species": "virginica"}, {"sepal_length": 6.9, "sepal_width": 3.1, "petal_length": 5.1, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 5.8, "sepal_width": 2.7, "petal_length": 5.1, "petal_width": 1.9, "species": "virginica"}, {"sepal_length": 6.8, "sepal_width": 3.2, "petal_length": 5.9, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 6.7, "sepal_width": 3.3, "petal_length": 5.7, "petal_width": 2.5, "species": "virginica"}, {"sepal_length": 6.7, "sepal_width": 3.0, "petal_length": 5.2, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 6.3, "sepal_width": 2.5, "petal_length": 5.0, "petal_width": 1.9, "species": "virginica"}, {"sepal_length": 6.5, "sepal_width": 3.0, "petal_length": 5.2, "petal_width": 2.0, "species": "virginica"}, {"sepal_length": 6.2, "sepal_width": 3.4, "petal_length": 5.4, "petal_width": 2.3, "species": "virginica"}, {"sepal_length": 5.9, "sepal_width": 3.0, "petal_length": 5.1, "petal_width": 1.8, "species": "virginica"}];
+
+function standardize(x){
+  return x.map((v,i)=>(v - MODEL.scalerMean[i]) / MODEL.scalerScale[i]);
+}
+
+function predict(x){
+  const xs = standardize(x);
+  const votes = [0,0,0];
+  const margins = [0,0,0];
+  MODEL.pairs.forEach((pair,k)=>{
+    const [i,j] = pair;
+    let d = MODEL.intercept[k];
+    for(let f=0; f<4; f++) d += MODEL.coef[k][f]*xs[f];
+    if(d > 0){ votes[i]++; margins[i]+=Math.abs(d); }
+    else { votes[j]++; margins[j]+=Math.abs(d); }
+  });
+  const maxVotes = Math.max(...votes);
+  let winners = [0,1,2].filter(i=>votes[i]===maxVotes);
+  let predicted = winners[0];
+  if(winners.length>1){
+    predicted = winners.reduce((a,b)=> margins[a]>=margins[b]?a:b);
+  }
+  return {votes, margins, predicted};
+}
+
+function nearestSpecimens(x, k=3){
+  const xs = standardize(x);
+  const scored = DATASET.map(row=>{
+    const rowVec = [row.sepal_length,row.sepal_width,row.petal_length,row.petal_width];
+    const rs = standardize(rowVec);
+    let d2 = 0;
+    for(let i=0;i<4;i++) d2 += (xs[i]-rs[i])*(xs[i]-rs[i]);
+    return {species: row.species, dist: Math.sqrt(d2)};
+  });
+  scored.sort((a,b)=>a.dist-b.dist);
+  return scored.slice(0,k);
+}
+
+function petalPath(length, width){
+  const L = length, W = width;
+  return `M0,0 C${-W},${-L*0.32} ${-W*0.62},${-L} 0,${-L*1.14} C${W*0.62},${-L} ${W},${-L*0.32} 0,0 Z`;
+}
+
+function buildFlower(){
+  const svg = document.getElementById('flowerSvg');
+  svg.innerHTML = `
+    <g id="sepalGroup"></g>
+    <g id="petalGroup"></g>
+    <circle cx="150" cy="150" r="9" fill="#B08D57" stroke="#4B3768" stroke-width="1.5"/>
+  `;
+  const sepalGroup = document.getElementById('sepalGroup');
+  const petalGroup = document.getElementById('petalGroup');
+  for(let i=0;i<3;i++){
+    const angle = i*120 + 60;
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('id', 'sepal'+i);
+    g.setAttribute('transform', `translate(150,150) rotate(${angle})`);
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('fill', 'rgba(124,148,115,0.55)');
+    p.setAttribute('stroke', '#526B49');
+    p.setAttribute('stroke-width', '1.2');
+    g.appendChild(p);
+    sepalGroup.appendChild(g);
+  }
+  for(let i=0;i<3;i++){
+    const angle = i*120;
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('id', 'petal'+i);
+    g.setAttribute('transform', `translate(150,150) rotate(${angle})`);
+    const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('fill', 'rgba(108,79,148,0.72)');
+    p.setAttribute('stroke', '#4B3768');
+    p.setAttribute('stroke-width', '1.2');
+    g.appendChild(p);
+    petalGroup.appendChild(g);
+  }
+}
+
+function normLen(v, stat, outMin, outMax){
+  const t = (v - stat.min) / (stat.max - stat.min);
+  return outMin + t*(outMax-outMin);
+}
+
+function updateFlower(sl, sw, pl, pw){
+  const sepalLen = normLen(sl, FEATURE_STATS.sepal_length, 55, 105);
+  const sepalWid = normLen(sw, FEATURE_STATS.sepal_width, 20, 46);
+  const petalLen = normLen(pl, FEATURE_STATS.petal_length, 30, 90);
+  const petalWid = normLen(pw, FEATURE_STATS.petal_width, 12, 38);
+
+  for(let i=0;i<3;i++){
+    const g = document.getElementById('sepal'+i);
+    const p = g.querySelector('path');
+    p.setAttribute('d', petalPath(sepalLen, sepalWid));
+    p.style.transition = 'd 0.15s ease';
+  }
+  for(let i=0;i<3;i++){
+    const g = document.getElementById('petal'+i);
+    const p = g.querySelector('path');
+    p.setAttribute('d', petalPath(petalLen, petalWid));
+    p.style.transition = 'd 0.15s ease';
+  }
+}
+
+function updateUI(){
+  const sl = parseFloat(document.getElementById('sl').value);
+  const sw = parseFloat(document.getElementById('sw').value);
+  const pl = parseFloat(document.getElementById('pl').value);
+  const pw = parseFloat(document.getElementById('pw').value);
+
+  document.getElementById('val-sl').textContent = sl.toFixed(1)+' cm';
+  document.getElementById('val-sw').textContent = sw.toFixed(1)+' cm';
+  document.getElementById('val-pl').textContent = pl.toFixed(1)+' cm';
+  document.getElementById('val-pw').textContent = pw.toFixed(1)+' cm';
+
+  updateFlower(sl, sw, pl, pw);
+
+  const {votes, predicted} = predict([sl, sw, pl, pw]);
+  const predSpecies = MODEL.classes[predicted];
+  const meta = SPECIES_META[predSpecies];
+
+  const nameEl = document.getElementById('speciesName');
+  nameEl.textContent = 'Iris ' + predSpecies;
+  nameEl.style.color = meta.color;
+  document.getElementById('speciesCommon').textContent = meta.common;
+
+  const totalVotes = votes.reduce((a,b)=>a+b,0);
+  const voteRow = document.getElementById('voteRow');
+  voteRow.innerHTML = MODEL.classes.map((cls,i)=>{
+    const pct = Math.round((votes[i]/totalVotes)*100);
+    const c = SPECIES_META[cls].color;
+    return `<div class="vote-item">
+      <span class="vote-label">${cls}</span>
+      <span class="vote-bar-bg"><span class="vote-bar-fill" style="width:${pct}%;background:${c}"></span></span>
+      <span class="vote-pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  const stamp = document.getElementById('stampBadge');
+  stamp.style.animation = 'none';
+  void stamp.offsetWidth;
+  stamp.style.animation = 'stampIn 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+  stamp.style.borderColor = meta.color;
+  stamp.style.color = meta.color;
+  stamp.textContent = 'identified · ' + votes[predicted] + '/3 votes';
+
+  const neighbors = nearestSpecimens([sl, sw, pl, pw], 3);
+  document.getElementById('neighborList').innerHTML = neighbors.map(n=>{
+    return `<div class="neighbor-chip">
+      <span class="nsp" style="color:${SPECIES_META[n.species].color}">${n.species}</span>
+      <span class="ndist">distance ${n.dist.toFixed(2)}</span>
+    </div>`;
+  }).join('');
+}
+
+const PRESETS = {
+  setosa: [5.0, 3.4, 1.5, 0.2],
+  versicolor: [5.9, 2.8, 4.3, 1.3],
+  virginica: [6.6, 3.0, 5.6, 2.1]
+};
+
+document.querySelectorAll('.preset-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const key = btn.dataset.p;
+    let vals;
+    if(key === 'random'){
+      vals = [
+        (Math.random()*(7.9-4.3)+4.3),
+        (Math.random()*(4.4-2.0)+2.0),
+        (Math.random()*(6.9-1.0)+1.0),
+        (Math.random()*(2.5-0.1)+0.1)
+      ];
+    } else {
+      vals = PRESETS[key];
+    }
+    document.getElementById('sl').value = vals[0].toFixed(1);
+    document.getElementById('sw').value = vals[1].toFixed(1);
+    document.getElementById('pl').value = vals[2].toFixed(1);
+    document.getElementById('pw').value = vals[3].toFixed(1);
+    updateUI();
+  });
+});
+
+['sl','sw','pl','pw'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', updateUI);
+});
+
+document.getElementById('modelNameBadge').textContent = MODEL.modelName;
+document.getElementById('cvAccBadge').textContent = (MODEL.cvAccuracy*100).toFixed(1)+'%';
+document.getElementById('importanceBlock').innerHTML = FEATURE_IMPORTANCE.map(([name,val])=>{
+  return `<div class="imp-row">
+    <span class="imp-name">${name.replace('_',' ')}</span>
+    <span class="imp-bar-bg"><span class="imp-bar-fill" style="width:${(val*100).toFixed(0)}%"></span></span>
+    <span>${(val*100).toFixed(0)}%</span>
+  </div>`;
+}).join('');
+
+buildFlower();
+updateUI();
+</script>
+</body>
+</html>

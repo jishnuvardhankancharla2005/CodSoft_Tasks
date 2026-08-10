@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fraud detection console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root{
+    --bg:#0a0d12;
+    --panel:#12161d;
+    --panel-2:#171c25;
+    --hair:#232a36;
+    --red:#ef4444;
+    --red-dim:#7f2b2b;
+    --green:#22c55e;
+    --green-dim:#1f6b3d;
+    --amber:#f2b84b;
+    --cyan:#38bdf8;
+    --text:#e7ebf2;
+    --text-dim:#8993a6;
+    --text-faint:#4e5666;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(56,189,248,0.06), transparent),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:52px 32px 80px;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);display:inline-block;}
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(30px,4vw,46px);
+    line-height:1.12;
+    margin:0 0 16px;
+    max-width:760px;
+    letter-spacing:-0.01em;
+  }
+  h1 span{color:var(--cyan);}
+  .lede{
+    font-size:15.5px;
+    line-height:1.65;
+    color:var(--text-dim);
+    max-width:640px;
+    margin:0 0 40px;
+  }
+  .lede b{color:var(--text);font-weight:500;}
+
+  .stage{
+    display:grid;
+    grid-template-columns:400px 1fr;
+    gap:1px;
+    background:var(--hair);
+    border:1px solid var(--hair);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  @media (max-width:820px){ .stage{grid-template-columns:1fr;} }
+
+  .console{background:var(--panel);padding:24px 24px 26px;}
+  .panel-heading{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin:0 0 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+  .preset-btn{
+    flex:1;
+    min-width:110px;
+    background:var(--panel-2);
+    border:1px solid var(--hair);
+    color:var(--text-dim);
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.02em;
+    padding:9px 8px;
+    border-radius:6px;
+    cursor:pointer;
+    text-align:center;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .preset-btn:hover{border-color:var(--cyan);color:var(--text);}
+  .preset-btn.fraud-preset:hover{border-color:var(--red);}
+  .preset-btn.genuine-preset:hover{border-color:var(--green);}
+
+  .sliders{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-bottom:20px;}
+  .slider-item{}
+  .slider-label{
+    display:flex;justify-content:space-between;
+    font-family:var(--font-mono);font-size:11px;
+    color:var(--text-dim);margin-bottom:5px;
+  }
+  .slider-label b{color:var(--text);font-weight:500;}
+  .slider-item input[type=range]{
+    -webkit-appearance:none;
+    width:100%;
+    height:3px;
+    background:var(--hair);
+    border-radius:2px;
+    cursor:pointer;
+  }
+  .slider-item input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:13px;height:13px;
+    border-radius:50%;
+    background:var(--cyan);
+    border:2px solid #0a0d12;
+    margin-top:-5px;
+  }
+  .slider-item input[type=range]::-moz-range-thumb{
+    width:11px;height:11px;border-radius:50%;
+    background:var(--cyan);border:2px solid #0a0d12;
+  }
+  .slider-item.amount input[type=range]::-webkit-slider-thumb{background:var(--amber);}
+
+  .scan-btn{
+    width:100%;
+    background:var(--cyan);
+    color:#052029;
+    border:none;
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:600;
+    padding:14px 0;
+    border-radius:7px;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .scan-btn:hover{background:#63cef9;}
+  .scan-btn:active{transform:scale(.98);}
+
+  .readout{background:var(--panel-2);padding:26px 28px 22px;}
+
+  .verdict-row{
+    display:flex;
+    align-items:center;
+    gap:26px;
+    flex-wrap:wrap;
+    padding-bottom:22px;
+    margin-bottom:22px;
+    border-bottom:1px solid var(--hair);
+  }
+  .verdict-badge{
+    font-family:var(--font-display);
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:.04em;
+    padding:9px 18px;
+    border-radius:8px;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .verdict-badge.genuine{background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.4);}
+  .verdict-badge.fraud{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.45);}
+
+  .gauge-wrap{flex:1;min-width:220px;}
+  .gauge-label{font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;justify-content:space-between;}
+  .gauge-score{font-family:var(--font-mono);color:var(--text);}
+  .gauge-track{
+    position:relative;
+    height:10px;
+    border-radius:5px;
+    background:linear-gradient(90deg, var(--green) 0%, var(--green) 28%, var(--amber) 45%, var(--red) 70%, var(--red) 100%);
+    overflow:visible;
+  }
+  .gauge-marker{
+    position:absolute;
+    top:-5px;
+    width:2px;height:20px;
+    background:var(--text);
+    transform:translateX(-1px);
+  }
+  .gauge-threshold{
+    position:absolute;
+    top:-3px;
+    width:1px;height:16px;
+    background:rgba(255,255,255,0.35);
+  }
+  .gauge-threshold::after{
+    content:'decision line';
+    position:absolute;
+    top:18px;left:50%;
+    transform:translateX(-50%);
+    font-family:var(--font-mono);
+    font-size:9px;
+    color:var(--text-faint);
+    white-space:nowrap;
+  }
+
+  .chart-title{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin:0 0 10px;
+  }
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media (max-width:600px){ .two-col{grid-template-columns:1fr;} }
+
+  .contrib-row{margin-bottom:9px;}
+  .contrib-label{
+    display:flex;justify-content:space-between;
+    font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-bottom:4px;
+  }
+  .contrib-track{position:relative;height:6px;background:var(--hair);border-radius:3px;}
+  .contrib-fill{position:absolute;top:0;height:100%;border-radius:3px;}
+
+  .chart-box{position:relative;width:100%;height:210px;}
+
+  .bottom-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:1px;
+    background:var(--hair);
+    border:1px solid var(--hair);
+    border-top:none;
+    border-radius:0 0 14px 14px;
+    overflow:hidden;
+  }
+  @media (max-width:820px){ .bottom-grid{grid-template-columns:1fr;} }
+
+  .info-panel{background:var(--panel);padding:24px 26px 26px;}
+
+  .feat-row{margin-bottom:12px;}
+  .feat-row:last-child{margin-bottom:0;}
+  .feat-label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--text);margin-bottom:5px;}
+  .feat-label .val{font-family:var(--font-mono);color:var(--text-dim);font-size:11px;}
+  .feat-bar-track{height:5px;background:var(--bg);border-radius:3px;overflow:hidden;}
+  .feat-bar-fill{height:100%;border-radius:3px;background:var(--cyan);}
+
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+  .stat-tile{background:var(--panel-2);border-radius:8px;padding:11px 13px;}
+  .stat-tile .lab{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);margin-bottom:5px;}
+  .stat-tile .v{font-family:var(--font-mono);font-size:18px;color:var(--text);}
+
+  .cm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+  .cm-tile{background:var(--bg);border:1px solid var(--hair);border-radius:6px;padding:9px 10px;text-align:center;}
+  .cm-tile .n{font-family:var(--font-mono);font-size:16px;color:var(--text);}
+  .cm-tile .l{font-family:var(--font-mono);font-size:9.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+
+  .stat-note{font-size:12px;color:var(--text-faint);line-height:1.6;margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Fraud detection engine &middot; 284,807 transactions scanned</div>
+  <h1>Score any transaction <span>in real time.</span></h1>
+  <p class="lede">A logistic regression trained on the 10 signals that separate fraud from genuine spend, out of 284,807 real transactions with only 492 confirmed frauds. Load a sample or set your own values, then scan it.</p>
+
+  <div class="stage">
+    <div class="console">
+      <p class="panel-heading">Load a sample transaction</p>
+      <div class="preset-row">
+        <button class="preset-btn genuine-preset" data-preset="genuine">Genuine A</button>
+        <button class="preset-btn genuine-preset" data-preset="genuine2">Genuine B</button>
+        <button class="preset-btn fraud-preset" data-preset="fraud">Fraud A</button>
+        <button class="preset-btn fraud-preset" data-preset="fraud2">Fraud B</button>
+      </div>
+
+      <p class="panel-heading">Transaction signals</p>
+      <div class="sliders" id="sliders"></div>
+
+      <button class="scan-btn" id="scan-btn">Scan transaction</button>
+    </div>
+
+    <div class="readout">
+      <div class="verdict-row">
+        <div class="verdict-badge genuine" id="verdict-badge">Genuine</div>
+        <div class="gauge-wrap">
+          <div class="gauge-label"><span>Fraud risk score</span><span class="gauge-score" id="gauge-score">0 / 100</span></div>
+          <div class="gauge-track">
+            <div class="gauge-threshold" id="gauge-threshold" style="left:31%"></div>
+            <div class="gauge-marker" id="gauge-marker" style="left:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <p class="chart-title">Top signals driving this call</p>
+          <div id="contrib-list"></div>
+        </div>
+        <div>
+          <p class="chart-title">Where it lands vs 400 real transactions</p>
+          <div class="chart-box"><canvas id="scatterChart" role="img" aria-label="Scatter plot of two key features across sample transactions, with genuine and fraudulent transactions colored differently and the current transaction highlighted"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-grid">
+    <div class="info-panel">
+      <p class="panel-heading">Why these 10 features</p>
+      <div id="feat-list"></div>
+      <p class="stat-note" style="margin-top:14px;">Ranked by how far fraud's average value sits from genuine's average, in standard deviations. All 28 anonymized components (V1&ndash;V28) plus Amount and Time were checked; these 10 carried the signal &mdash; Time was dropped, and 18 of the V-components separated the two classes only weakly.</p>
+    </div>
+    <div class="info-panel">
+      <p class="panel-heading">Model on held-out data (20% test split)</p>
+      <div class="stat-grid">
+        <div class="stat-tile"><div class="lab">Precision</div><div class="v">0.82</div></div>
+        <div class="stat-tile"><div class="lab">Recall</div><div class="v">0.82</div></div>
+        <div class="stat-tile"><div class="lab">F1-score</div><div class="v">0.82</div></div>
+        <div class="stat-tile"><div class="lab">ROC-AUC</div><div class="v">0.971</div></div>
+      </div>
+      <div class="cm-grid">
+        <div class="cm-tile"><div class="n">80</div><div class="l">Fraud caught</div></div>
+        <div class="cm-tile"><div class="n">18</div><div class="l">Fraud missed</div></div>
+        <div class="cm-tile"><div class="n">18</div><div class="l">False alarms</div></div>
+        <div class="cm-tile"><div class="n">56,846</div><div class="l">Correctly cleared</div></div>
+      </div>
+      <p class="stat-note">Trained on 227,845 transactions (394 fraud), tested on 56,962 held out (98 fraud) that the model never saw. A random forest on the full 30 features scores slightly higher (F1 0.83, precision 0.84) but can't run inside a browser page &mdash; this logistic regression is the version doing the scoring above, live.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---- Embedded model: logistic regression on 10 selected features ----
+const FEATURES = ["V14","V4","V10","V12","V17","V11","V3","V16","V7","Amount"];
+const COEF = {"V14": -0.9539797914536089, "V4": 0.8793968630346145, "V10": -0.5265553661777675, "V12": -0.724367238120195, "V17": -0.2739150456358578, "V11": 0.3214638221645757, "V3": -0.23059800808880065, "V16": -0.6548236127344863, "V7": -0.15031828768638444, "Amount": 0.20892219744170837};
+const INTERCEPT = -2.920335847133517;
+const AMOUNT_MEAN = 88.34961925093134;
+const AMOUNT_SCALE = 250.1196701352354;
+const Z_THRESHOLD = 10.110889212163867;
+const Z_MIN = -15, Z_MAX = 65; // display range for the risk gauge
+
+const RANGES = {
+  V14:{min:-19,max:6}, V4:{min:-6,max:10}, V10:{min:-20,max:9},
+  V12:{min:-16,max:5}, V17:{min:-21,max:6}, V11:{min:-5,max:9},
+  V3:{min:-25,max:6}, V16:{min:-11,max:6}, V7:{min:-15,max:8},
+  Amount:{min:0,max:1000}
+};
+
+const FEATURE_SEPARATION = [
+  {f:"V14", sep:7.79}, {f:"V17", sep:6.55}, {f:"V12", sep:6.62}, {f:"V10", sep:5.44},
+  {f:"V3", sep:4.83}, {f:"V16", sep:4.90}, {f:"V4", sep:3.25}, {f:"V7", sep:4.72},
+  {f:"V11", sep:3.79}, {f:"Amount", sep:0.14}
+];
+
+const PRESETS = {
+  fraud:    {"V14": -4.579, "V4": 6.535, "V10": -7.731, "V12": -5.314, "V17": -10.961, "V11": 3.829, "V3": -31.104, "V16": -4.998, "V7": -20.372, "Amount": 99.99},
+  fraud2:   {"V14": -6.918, "V4": 9.249, "V10": -14.557, "V12": -10.38, "V17": -20.255, "V11": 4.392, "V3": -17.88, "V16": -10.328, "V7": -18.015, "Amount": 53.95},
+  genuine:  {"V14": 1.082, "V4": 4.092, "V10": 0.973, "V12": -2.432, "V17": -0.152, "V11": -0.32, "V3": 0.451, "V16": 1.086, "V7": -0.583, "Amount": 18.96},
+  genuine2: {"V14": -0.107, "V4": -1.222, "V10": -0.576, "V12": 0.291, "V17": -1.443, "V11": 0.327, "V3": 1.359, "V16": 1.103, "V7": 1.007, "Amount": 164.01}
+};
+
+const SCATTER = [{"V14": 0.73, "V4": -1.02, "Class": 0}, {"V14": 0.42, "V4": -2.63, "Class": 0}, {"V14": -1.08, "V4": 0.57, "Class": 0}, {"V14": 0.07, "V4": 0.82, "Class": 0}, {"V14": 0.23, "V4": 1.21, "Class": 0}, {"V14": 0.46, "V4": -0.64, "Class": 0}, {"V14": -0.08, "V4": -0.34, "Class": 0}, {"V14": 0.84, "V4": 0.04, "Class": 0}, {"V14": 0.18, "V4": -0.93, "Class": 0}, {"V14": 0.64, "V4": 0.36, "Class": 0}, {"V14": 0.35, "V4": -0.39, "Class": 0}, {"V14": 0.15, "V4": -0.48, "Class": 0}, {"V14": -0.44, "V4": -1.81, "Class": 0}, {"V14": 0.16, "V4": 0.69, "Class": 0}, {"V14": 0.19, "V4": 0.78, "Class": 0}, {"V14": 0.58, "V4": 0.23, "Class": 0}, {"V14": -0.26, "V4": -0.18, "Class": 0}, {"V14": 0.36, "V4": -3.48, "Class": 0}, {"V14": -0.77, "V4": -1.27, "Class": 0}, {"V14": -0.52, "V4": -2.67, "Class": 0}, {"V14": 0.52, "V4": 0.75, "Class": 0}, {"V14": 0.87, "V4": -0.54, "Class": 0}, {"V14": 0.06, "V4": -0.22, "Class": 0}, {"V14": 1.01, "V4": -0.29, "Class": 0}, {"V14": 0.12, "V4": 0.17, "Class": 0}, {"V14": 0.19, "V4": 0.13, "Class": 0}, {"V14": -2.44, "V4": -0.83, "Class": 0}, {"V14": 0.99, "V4": -0.11, "Class": 0}, {"V14": -0.9, "V4": 0.39, "Class": 0}, {"V14": -1.66, "V4": 0.87, "Class": 0}, {"V14": 0.18, "V4": 1.08, "Class": 0}, {"V14": -0.6, "V4": -2.81, "Class": 0}, {"V14": 1.36, "V4": 0.58, "Class": 0}, {"V14": -0.38, "V4": -0.22, "Class": 0}, {"V14": -1.27, "V4": -0.73, "Class": 0}, {"V14": -0.25, "V4": -1.47, "Class": 0}, {"V14": -0.77, "V4": 0.53, "Class": 0}, {"V14": 0.25, "V4": 0.68, "Class": 0}, {"V14": 0.27, "V4": 0.11, "Class": 0}, {"V14": 0.23, "V4": 0.64, "Class": 0}, {"V14": 0.96, "V4": -0.83, "Class": 0}, {"V14": -0.99, "V4": 1.02, "Class": 0}, {"V14": 0.42, "V4": -1.82, "Class": 0}, {"V14": -0.33, "V4": -1.0, "Class": 0}, {"V14": 1.54, "V4": 0.55, "Class": 0}, {"V14": 1.09, "V4": 0.6, "Class": 0}, {"V14": 0.91, "V4": 1.0, "Class": 0}, {"V14": -0.14, "V4": -0.53, "Class": 0}, {"V14": -1.07, "V4": -1.16, "Class": 0}, {"V14": -0.2, "V4": 0.86, "Class": 0}, {"V14": 0.17, "V4": 0.22, "Class": 0}, {"V14": -0.65, "V4": -2.05, "Class": 0}, {"V14": -0.13, "V4": -1.49, "Class": 0}, {"V14": -1.25, "V4": -0.05, "Class": 0}, {"V14": 0.18, "V4": 0.46, "Class": 0}, {"V14": 1.03, "V4": 0.2, "Class": 0}, {"V14": -0.77, "V4": 0.28, "Class": 0}, {"V14": -0.2, "V4": 3.68, "Class": 0}, {"V14": 0.28, "V4": -0.73, "Class": 0}, {"V14": 0.49, "V4": 0.73, "Class": 0}, {"V14": -0.9, "V4": -0.42, "Class": 0}, {"V14": -0.15, "V4": -0.93, "Class": 0}, {"V14": 0.54, "V4": -0.0, "Class": 0}, {"V14": 0.29, "V4": -0.48, "Class": 0}, {"V14": 0.92, "V4": 1.19, "Class": 0}, {"V14": -0.4, "V4": 0.7, "Class": 0}, {"V14": 0.35, "V4": 0.46, "Class": 0}, {"V14": 1.15, "V4": -2.44, "Class": 0}, {"V14": -0.98, "V4": -1.58, "Class": 0}, {"V14": -0.12, "V4": -2.64, "Class": 0}, {"V14": 0.3, "V4": 2.52, "Class": 0}, {"V14": -2.13, "V4": -2.25, "Class": 0}, {"V14": 0.13, "V4": 1.41, "Class": 0}, {"V14": 0.55, "V4": -2.56, "Class": 0}, {"V14": -0.25, "V4": 0.59, "Class": 0}, {"V14": 0.23, "V4": -0.59, "Class": 0}, {"V14": 0.66, "V4": -0.62, "Class": 0}, {"V14": 0.21, "V4": -0.44, "Class": 0}, {"V14": -1.21, "V4": -0.45, "Class": 0}, {"V14": 1.13, "V4": -1.0, "Class": 0}, {"V14": -0.23, "V4": 0.67, "Class": 0}, {"V14": -0.0, "V4": 0.18, "Class": 0}, {"V14": -0.34, "V4": 0.89, "Class": 0}, {"V14": -0.89, "V4": 0.85, "Class": 0}, {"V14": 0.63, "V4": -0.41, "Class": 0}, {"V14": 1.03, "V4": 1.33, "Class": 0}, {"V14": -0.48, "V4": 0.49, "Class": 0}, {"V14": -0.86, "V4": -0.53, "Class": 0}, {"V14": 0.59, "V4": 0.03, "Class": 0}, {"V14": -0.96, "V4": -0.66, "Class": 0}, {"V14": 2.65, "V4": 2.99, "Class": 0}, {"V14": -0.85, "V4": -1.32, "Class": 0}, {"V14": 0.56, "V4": 0.77, "Class": 0}, {"V14": 1.21, "V4": -1.1, "Class": 0}, {"V14": -0.38, "V4": -1.14, "Class": 0}, {"V14": -0.49, "V4": 0.07, "Class": 0}, {"V14": -0.01, "V4": 0.3, "Class": 0}, {"V14": 0.28, "V4": 1.03, "Class": 0}, {"V14": 0.13, "V4": 4.79, "Class": 0}, {"V14": -0.54, "V4": -1.62, "Class": 0}, {"V14": 0.14, "V4": 0.27, "Class": 0}, {"V14": -0.44, "V4": 0.01, "Class": 0}, {"V14": 0.28, "V4": -2.14, "Class": 0}, {"V14": 0.01, "V4": -0.82, "Class": 0}, {"V14": 0.29, "V4": 1.17, "Class": 0}, {"V14": -0.15, "V4": -2.29, "Class": 0}, {"V14": -0.22, "V4": 1.58, "Class": 0}, {"V14": 1.03, "V4": 1.62, "Class": 0}, {"V14": 1.44, "V4": -0.42, "Class": 0}, {"V14": 0.01, "V4": -0.31, "Class": 0}, {"V14": -1.08, "V4": -1.61, "Class": 0}, {"V14": 0.22, "V4": 1.05, "Class": 0}, {"V14": -1.14, "V4": -1.71, "Class": 0}, {"V14": 0.78, "V4": 1.05, "Class": 0}, {"V14": 1.63, "V4": -0.31, "Class": 0}, {"V14": -1.05, "V4": -0.45, "Class": 0}, {"V14": -0.2, "V4": -1.47, "Class": 0}, {"V14": -0.62, "V4": -0.52, "Class": 0}, {"V14": 0.47, "V4": 0.32, "Class": 0}, {"V14": -0.97, "V4": -0.4, "Class": 0}, {"V14": 1.49, "V4": 1.68, "Class": 0}, {"V14": 0.15, "V4": 1.14, "Class": 0}, {"V14": 0.16, "V4": 0.66, "Class": 0}, {"V14": 0.5, "V4": -0.75, "Class": 0}, {"V14": 0.38, "V4": -1.06, "Class": 0}, {"V14": -0.99, "V4": 0.42, "Class": 0}, {"V14": 0.23, "V4": 0.37, "Class": 0}, {"V14": 0.61, "V4": 0.87, "Class": 0}, {"V14": 2.62, "V4": 1.49, "Class": 0}, {"V14": -0.36, "V4": -0.74, "Class": 0}, {"V14": -0.4, "V4": -0.2, "Class": 0}, {"V14": 0.03, "V4": 1.31, "Class": 0}, {"V14": -0.42, "V4": 0.55, "Class": 0}, {"V14": -1.84, "V4": 0.22, "Class": 0}, {"V14": -1.08, "V4": 0.4, "Class": 0}, {"V14": 0.34, "V4": 0.54, "Class": 0}, {"V14": 0.23, "V4": -0.03, "Class": 0}, {"V14": -0.45, "V4": -1.1, "Class": 0}, {"V14": -0.65, "V4": 0.33, "Class": 0}, {"V14": 0.24, "V4": 3.09, "Class": 0}, {"V14": 0.63, "V4": 2.26, "Class": 0}, {"V14": 0.4, "V4": -0.82, "Class": 0}, {"V14": 2.13, "V4": -1.06, "Class": 0}, {"V14": -0.45, "V4": 0.68, "Class": 0}, {"V14": -0.31, "V4": -0.87, "Class": 0}, {"V14": 0.1, "V4": -0.52, "Class": 0}, {"V14": 0.45, "V4": 0.9, "Class": 0}, {"V14": 0.21, "V4": -0.05, "Class": 0}, {"V14": 0.1, "V4": -0.07, "Class": 0}, {"V14": 0.93, "V4": -0.13, "Class": 0}, {"V14": 0.42, "V4": 0.73, "Class": 0}, {"V14": 5.49, "V4": 0.75, "Class": 0}, {"V14": 0.06, "V4": 2.8, "Class": 0}, {"V14": 0.49, "V4": 4.21, "Class": 0}, {"V14": -1.39, "V4": 0.39, "Class": 0}, {"V14": 0.83, "V4": 2.46, "Class": 0}, {"V14": 0.18, "V4": -1.04, "Class": 0}, {"V14": -0.2, "V4": -2.65, "Class": 0}, {"V14": 1.79, "V4": -0.62, "Class": 0}, {"V14": 0.35, "V4": 0.46, "Class": 0}, {"V14": -0.28, "V4": 2.56, "Class": 0}, {"V14": -0.2, "V4": -0.6, "Class": 0}, {"V14": -0.05, "V4": -0.74, "Class": 0}, {"V14": -0.47, "V4": -1.13, "Class": 0}, {"V14": 0.71, "V4": 3.65, "Class": 0}, {"V14": 0.55, "V4": 0.42, "Class": 0}, {"V14": -0.39, "V4": -1.56, "Class": 0}, {"V14": -0.5, "V4": 0.01, "Class": 0}, {"V14": 0.54, "V4": -0.75, "Class": 0}, {"V14": 0.42, "V4": -1.81, "Class": 0}, {"V14": 0.48, "V4": -0.68, "Class": 0}, {"V14": 0.02, "V4": -0.16, "Class": 0}, {"V14": -1.12, "V4": 0.99, "Class": 0}, {"V14": 0.52, "V4": -0.26, "Class": 0}, {"V14": 0.68, "V4": 0.2, "Class": 0}, {"V14": -0.99, "V4": 0.64, "Class": 0}, {"V14": 0.09, "V4": 0.33, "Class": 0}, {"V14": -0.56, "V4": 1.12, "Class": 0}, {"V14": 0.19, "V4": -0.6, "Class": 0}, {"V14": 0.3, "V4": 0.52, "Class": 0}, {"V14": 0.59, "V4": -1.64, "Class": 0}, {"V14": 0.32, "V4": -0.67, "Class": 0}, {"V14": -0.59, "V4": -1.97, "Class": 0}, {"V14": 0.16, "V4": -1.04, "Class": 0}, {"V14": 0.53, "V4": 0.26, "Class": 0}, {"V14": 0.29, "V4": -1.1, "Class": 0}, {"V14": -0.59, "V4": -0.96, "Class": 0}, {"V14": -0.3, "V4": 0.1, "Class": 0}, {"V14": 0.19, "V4": 0.26, "Class": 0}, {"V14": -0.35, "V4": 2.58, "Class": 0}, {"V14": 0.02, "V4": -0.63, "Class": 0}, {"V14": -0.21, "V4": -1.81, "Class": 0}, {"V14": 1.22, "V4": 4.47, "Class": 0}, {"V14": -1.25, "V4": -2.73, "Class": 0}, {"V14": -0.43, "V4": -1.67, "Class": 0}, {"V14": -1.01, "V4": -1.3, "Class": 0}, {"V14": 0.37, "V4": 0.38, "Class": 0}, {"V14": 0.01, "V4": 2.75, "Class": 0}, {"V14": 0.34, "V4": 1.12, "Class": 0}, {"V14": 0.81, "V4": -0.55, "Class": 0}, {"V14": -0.54, "V4": 0.76, "Class": 0}, {"V14": -0.72, "V4": -1.73, "Class": 0}, {"V14": -0.12, "V4": 3.77, "Class": 0}, {"V14": 0.09, "V4": 0.39, "Class": 0}, {"V14": 0.25, "V4": 0.93, "Class": 0}, {"V14": -1.31, "V4": -2.13, "Class": 0}, {"V14": -0.67, "V4": 2.47, "Class": 0}, {"V14": 0.3, "V4": -1.81, "Class": 0}, {"V14": -0.12, "V4": -0.45, "Class": 0}, {"V14": -1.87, "V4": -0.19, "Class": 0}, {"V14": 0.78, "V4": -1.71, "Class": 0}, {"V14": 0.83, "V4": -1.18, "Class": 0}, {"V14": 0.36, "V4": 0.55, "Class": 0}, {"V14": -0.9, "V4": -0.51, "Class": 0}, {"V14": 0.25, "V4": 0.64, "Class": 0}, {"V14": -0.07, "V4": -1.74, "Class": 0}, {"V14": 1.1, "V4": -2.28, "Class": 0}, {"V14": 0.02, "V4": -2.3, "Class": 0}, {"V14": -0.16, "V4": -2.26, "Class": 0}, {"V14": -0.81, "V4": -0.27, "Class": 0}, {"V14": -0.91, "V4": -0.78, "Class": 0}, {"V14": 0.37, "V4": 0.32, "Class": 0}, {"V14": 1.06, "V4": 0.01, "Class": 0}, {"V14": 0.01, "V4": -1.52, "Class": 0}, {"V14": -0.02, "V4": -1.31, "Class": 0}, {"V14": -1.07, "V4": -0.61, "Class": 0}, {"V14": -0.12, "V4": -0.72, "Class": 0}, {"V14": -0.02, "V4": -0.3, "Class": 0}, {"V14": 1.75, "V4": 2.83, "Class": 0}, {"V14": -0.0, "V4": -3.07, "Class": 0}, {"V14": 0.26, "V4": 0.41, "Class": 0}, {"V14": 1.22, "V4": -0.24, "Class": 0}, {"V14": -2.36, "V4": 0.3, "Class": 0}, {"V14": 1.17, "V4": 0.8, "Class": 0}, {"V14": 0.42, "V4": -0.9, "Class": 0}, {"V14": 0.81, "V4": 0.73, "Class": 0}, {"V14": -1.36, "V4": -0.71, "Class": 0}, {"V14": -0.83, "V4": 0.55, "Class": 0}, {"V14": 1.88, "V4": -1.49, "Class": 0}, {"V14": -2.64, "V4": 0.6, "Class": 0}, {"V14": -0.35, "V4": -1.12, "Class": 0}, {"V14": -1.1, "V4": -0.16, "Class": 0}, {"V14": 1.13, "V4": 1.23, "Class": 0}, {"V14": 0.4, "V4": 1.02, "Class": 0}, {"V14": -0.12, "V4": -0.17, "Class": 0}, {"V14": 0.7, "V4": 0.81, "Class": 0}, {"V14": 0.33, "V4": -0.65, "Class": 0}, {"V14": -0.57, "V4": -0.01, "Class": 0}, {"V14": 0.06, "V4": 0.5, "Class": 0}, {"V14": 0.15, "V4": -0.08, "Class": 0}, {"V14": 0.59, "V4": 0.41, "Class": 0}, {"V14": -0.21, "V4": -2.33, "Class": 0}, {"V14": 0.27, "V4": -0.83, "Class": 0}, {"V14": 0.54, "V4": 0.56, "Class": 0}, {"V14": -0.73, "V4": 0.14, "Class": 0}, {"V14": 0.46, "V4": 0.64, "Class": 0}, {"V14": -0.88, "V4": -0.62, "Class": 0}, {"V14": -0.03, "V4": -0.98, "Class": 0}, {"V14": -0.2, "V4": 0.42, "Class": 0}, {"V14": 0.39, "V4": -0.07, "Class": 0}, {"V14": -7.28, "V4": 4.24, "Class": 1}, {"V14": -6.43, "V4": 3.76, "Class": 1}, {"V14": -7.01, "V4": 11.19, "Class": 1}, {"V14": -6.28, "V4": 3.82, "Class": 1}, {"V14": -9.27, "V4": 5.04, "Class": 1}, {"V14": -0.33, "V4": 3.17, "Class": 1}, {"V14": -13.73, "V4": 7.76, "Class": 1}, {"V14": -8.89, "V4": 7.23, "Class": 1}, {"V14": -3.93, "V4": 8.9, "Class": 1}, {"V14": -4.63, "V4": 1.21, "Class": 1}, {"V14": -13.78, "V4": 8.81, "Class": 1}, {"V14": -9.8, "V4": 5.58, "Class": 1}, {"V14": -4.86, "V4": 3.29, "Class": 1}, {"V14": -7.91, "V4": 2.2, "Class": 1}, {"V14": -0.82, "V4": -0.01, "Class": 1}, {"V14": -7.13, "V4": 1.77, "Class": 1}, {"V14": -5.59, "V4": 4.03, "Class": 1}, {"V14": -14.22, "V4": 8.2, "Class": 1}, {"V14": -3.93, "V4": 8.9, "Class": 1}, {"V14": -8.64, "V4": 6.19, "Class": 1}, {"V14": -12.88, "V4": 5.35, "Class": 1}, {"V14": -0.47, "V4": 1.15, "Class": 1}, {"V14": -5.14, "V4": 1.99, "Class": 1}, {"V14": -6.46, "V4": 2.65, "Class": 1}, {"V14": 1.03, "V4": 2.89, "Class": 1}, {"V14": -6.07, "V4": 3.87, "Class": 1}, {"V14": -6.62, "V4": 3.4, "Class": 1}, {"V14": -10.31, "V4": 5.17, "Class": 1}, {"V14": -11.57, "V4": 6.55, "Class": 1}, {"V14": -5.41, "V4": 3.63, "Class": 1}, {"V14": -10.54, "V4": 5.97, "Class": 1}, {"V14": -5.61, "V4": 4.45, "Class": 1}, {"V14": -1.07, "V4": -0.27, "Class": 1}, {"V14": -8.49, "V4": 6.08, "Class": 1}, {"V14": -8.57, "V4": 3.25, "Class": 1}, {"V14": -7.63, "V4": 5.84, "Class": 1}, {"V14": -2.42, "V4": 3.83, "Class": 1}, {"V14": -4.63, "V4": 0.09, "Class": 1}, {"V14": -2.24, "V4": 2.68, "Class": 1}, {"V14": -8.15, "V4": 3.89, "Class": 1}, {"V14": -3.52, "V4": 2.34, "Class": 1}, {"V14": -13.48, "V4": 7.74, "Class": 1}, {"V14": -8.04, "V4": 4.18, "Class": 1}, {"V14": -11.54, "V4": 6.8, "Class": 1}, {"V14": -3.66, "V4": 1.2, "Class": 1}, {"V14": -4.71, "V4": 4.34, "Class": 1}, {"V14": -9.58, "V4": 5.18, "Class": 1}, {"V14": -5.42, "V4": 3.07, "Class": 1}, {"V14": -6.99, "V4": 2.18, "Class": 1}, {"V14": -13.27, "V4": 11.82, "Class": 1}, {"V14": -2.74, "V4": 2.57, "Class": 1}, {"V14": -3.93, "V4": 8.9, "Class": 1}, {"V14": -15.45, "V4": 8.34, "Class": 1}, {"V14": -2.37, "V4": -0.28, "Class": 1}, {"V14": -6.22, "V4": 4.32, "Class": 1}, {"V14": -6.83, "V4": 6.32, "Class": 1}, {"V14": -7.86, "V4": 2.42, "Class": 1}, {"V14": -3.81, "V4": 1.41, "Class": 1}, {"V14": -9.07, "V4": 3.32, "Class": 1}, {"V14": -14.03, "V4": 7.12, "Class": 1}, {"V14": -12.99, "V4": 4.93, "Class": 1}, {"V14": -10.38, "V4": 5.81, "Class": 1}, {"V14": -5.15, "V4": 5.46, "Class": 1}, {"V14": -4.65, "V4": 3.24, "Class": 1}, {"V14": -6.08, "V4": 4.73, "Class": 1}, {"V14": 1.07, "V4": -0.2, "Class": 1}, {"V14": -10.74, "V4": 4.96, "Class": 1}, {"V14": -9.63, "V4": 6.09, "Class": 1}, {"V14": -12.38, "V4": 5.66, "Class": 1}, {"V14": -6.07, "V4": 5.8, "Class": 1}, {"V14": -7.35, "V4": 10.46, "Class": 1}, {"V14": -13.97, "V4": 7.78, "Class": 1}, {"V14": -10.14, "V4": 9.65, "Class": 1}, {"V14": -7.42, "V4": 2.81, "Class": 1}, {"V14": 1.27, "V4": 5.62, "Class": 1}, {"V14": -15.3, "V4": 8.25, "Class": 1}, {"V14": -9.09, "V4": 6.04, "Class": 1}, {"V14": -18.49, "V4": 10.34, "Class": 1}, {"V14": -8.39, "V4": 1.66, "Class": 1}, {"V14": -4.56, "V4": 1.38, "Class": 1}, {"V14": -0.82, "V4": 0.91, "Class": 1}, {"V14": -13.04, "V4": 7.1, "Class": 1}, {"V14": -3.51, "V4": 4.17, "Class": 1}, {"V14": -6.19, "V4": 3.92, "Class": 1}, {"V14": -8.66, "V4": 3.26, "Class": 1}, {"V14": -11.22, "V4": 3.55, "Class": 1}, {"V14": -4.35, "V4": 2.5, "Class": 1}, {"V14": -8.64, "V4": 5.92, "Class": 1}, {"V14": -8.6, "V4": 3.92, "Class": 1}, {"V14": -9.18, "V4": 6.08, "Class": 1}, {"V14": -12.62, "V4": 7.96, "Class": 1}, {"V14": -4.66, "V4": 2.0, "Class": 1}, {"V14": -6.67, "V4": 1.75, "Class": 1}, {"V14": -0.43, "V4": 2.79, "Class": 1}, {"V14": -9.41, "V4": 4.33, "Class": 1}, {"V14": -9.06, "V4": 7.38, "Class": 1}, {"V14": -4.7, "V4": 2.38, "Class": 1}, {"V14": -0.97, "V4": 3.12, "Class": 1}, {"V14": -14.12, "V4": 8.01, "Class": 1}, {"V14": -9.07, "V4": 3.32, "Class": 1}, {"V14": -7.67, "V4": 2.2, "Class": 1}, {"V14": -4.29, "V4": 3.04, "Class": 1}, {"V14": -2.38, "V4": 3.16, "Class": 1}, {"V14": -13.25, "V4": 7.47, "Class": 1}, {"V14": -10.73, "V4": 4.89, "Class": 1}, {"V14": -10.24, "V4": 8.12, "Class": 1}, {"V14": -5.84, "V4": 6.37, "Class": 1}, {"V14": -7.84, "V4": 5.93, "Class": 1}, {"V14": -12.46, "V4": 5.72, "Class": 1}, {"V14": -9.15, "V4": 6.01, "Class": 1}, {"V14": -4.39, "V4": 0.24, "Class": 1}, {"V14": -4.22, "V4": 0.18, "Class": 1}, {"V14": -1.82, "V4": -0.46, "Class": 1}, {"V14": -5.59, "V4": 3.18, "Class": 1}, {"V14": -8.65, "V4": 9.1, "Class": 1}, {"V14": -9.07, "V4": 3.32, "Class": 1}, {"V14": -8.51, "V4": 0.28, "Class": 1}, {"V14": -1.89, "V4": 0.38, "Class": 1}, {"V14": -4.82, "V4": 2.04, "Class": 1}, {"V14": -11.61, "V4": 5.15, "Class": 1}, {"V14": -4.46, "V4": 2.01, "Class": 1}, {"V14": -11.57, "V4": 2.94, "Class": 1}, {"V14": -6.28, "V4": 2.18, "Class": 1}, {"V14": 0.98, "V4": 6.95, "Class": 1}, {"V14": -1.82, "V4": -0.76, "Class": 1}, {"V14": -5.05, "V4": 2.06, "Class": 1}, {"V14": 0.71, "V4": 0.47, "Class": 1}, {"V14": -8.2, "V4": 6.16, "Class": 1}, {"V14": -5.76, "V4": 3.73, "Class": 1}, {"V14": -10.13, "V4": 8.43, "Class": 1}, {"V14": -4.51, "V4": 2.09, "Class": 1}, {"V14": -8.3, "V4": 5.9, "Class": 1}, {"V14": -13.03, "V4": 11.81, "Class": 1}, {"V14": -12.78, "V4": 11.79, "Class": 1}, {"V14": -12.46, "V4": 5.3, "Class": 1}, {"V14": 1.5, "V4": 1.73, "Class": 1}, {"V14": -3.55, "V4": 11.12, "Class": 1}, {"V14": -2.24, "V4": 5.96, "Class": 1}, {"V14": 0.58, "V4": 0.85, "Class": 1}, {"V14": -7.12, "V4": 3.99, "Class": 1}];
+
+// ---- build sliders ----
+const slidersEl = document.getElementById('sliders');
+let current = {...PRESETS.genuine};
+
+FEATURES.forEach(f => {
+  const r = RANGES[f];
+  const item = document.createElement('div');
+  item.className = 'slider-item' + (f==='Amount' ? ' amount' : '');
+  const step = f==='Amount' ? 1 : 0.1;
+  item.innerHTML = `
+    <div class="slider-label"><span>${f}</span><b id="val-${f}">${current[f]}</b></div>
+    <input type="range" id="slider-${f}" min="${r.min}" max="${r.max}" step="${step}" value="${current[f]}">
+  `;
+  slidersEl.appendChild(item);
+});
+
+FEATURES.forEach(f => {
+  const slider = document.getElementById(`slider-${f}`);
+  slider.addEventListener('input', () => {
+    current[f] = Number(slider.value);
+    document.getElementById(`val-${f}`).textContent = f==='Amount' ? current[f].toFixed(0) : current[f].toFixed(2);
+  });
+});
+
+function applyPreset(name){
+  current = {...PRESETS[name]};
+  FEATURES.forEach(f => {
+    document.getElementById(`slider-${f}`).value = current[f];
+    document.getElementById(`val-${f}`).textContent = f==='Amount' ? current[f].toFixed(0) : current[f].toFixed(2);
+  });
+  runScan();
+}
+
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+});
+
+// ---- feature separation list ----
+const featListEl = document.getElementById('feat-list');
+const maxSep = Math.max(...FEATURE_SEPARATION.map(d => d.sep));
+FEATURE_SEPARATION.slice().sort((a,b)=>b.sep-a.sep).forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'feat-row';
+  row.innerHTML = `
+    <div class="feat-label"><span>${d.f}</span><span class="val">${d.sep.toFixed(2)}&sigma; apart</span></div>
+    <div class="feat-bar-track"><div class="feat-bar-fill" style="width:${(d.sep/maxSep*100).toFixed(1)}%"></div></div>
+  `;
+  featListEl.appendChild(row);
+});
+
+// ---- scatter chart ----
+let scatterChart;
+function buildScatter(highlight){
+  const ctx = document.getElementById('scatterChart');
+  const genuinePts = SCATTER.filter(d => d.Class===0).map(d => ({x:d.V14, y:d.V4}));
+  const fraudPts = SCATTER.filter(d => d.Class===1).map(d => ({x:d.V14, y:d.V4}));
+  if(scatterChart) scatterChart.destroy();
+  scatterChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [
+        { label:'Genuine', data: genuinePts, backgroundColor:'rgba(34,197,94,0.45)', pointRadius:3 },
+        { label:'Fraud', data: fraudPts, backgroundColor:'rgba(239,68,68,0.55)', pointRadius:3 },
+        { label:'This transaction', data:[{x:highlight.V14, y:highlight.V4}], backgroundColor:'#38bdf8', borderColor:'#38bdf8', pointRadius:8, pointStyle:'rectRot' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      layout:{padding:8},
+      plugins:{ legend:{display:false}, tooltip:{enabled:false} },
+      scales:{
+        x:{ title:{display:true,text:'V14',color:'#8993a6',font:{family:'JetBrains Mono',size:10}},
+            grid:{color:'rgba(137,147,166,0.1)'}, ticks:{color:'#8993a6',font:{family:'JetBrains Mono',size:9}} },
+        y:{ title:{display:true,text:'V4',color:'#8993a6',font:{family:'JetBrains Mono',size:10}},
+            grid:{color:'rgba(137,147,166,0.1)'}, ticks:{color:'#8993a6',font:{family:'JetBrains Mono',size:9}} }
+      }
+    }
+  });
+}
+
+// ---- contribution list ----
+function buildContributions(vals, z){
+  const contribEl = document.getElementById('contrib-list');
+  contribEl.innerHTML = '';
+  const scaledAmount = (vals.Amount - AMOUNT_MEAN) / AMOUNT_SCALE;
+  const contribs = FEATURES.map(f => {
+    const x = f==='Amount' ? scaledAmount : vals[f];
+    return { f, c: COEF[f]*x };
+  });
+  const maxAbs = Math.max(...contribs.map(d => Math.abs(d.c)), 0.01);
+  contribs.sort((a,b) => Math.abs(b.c)-Math.abs(a.c)).slice(0,6).forEach(d => {
+    const towardFraud = d.c > 0;
+    const pct = Math.abs(d.c)/maxAbs*50;
+    const row = document.createElement('div');
+    row.className = 'contrib-row';
+    row.innerHTML = `
+      <div class="contrib-label"><span>${d.f}</span><span style="color:${towardFraud?'var(--red)':'var(--green)'}">${towardFraud?'toward fraud':'toward genuine'}</span></div>
+      <div class="contrib-track">
+        <div class="contrib-fill" style="left:50%;width:${pct}%;background:${towardFraud?'var(--red)':'var(--green)'};${towardFraud?'':'transform:translateX(-100%);'}"></div>
+      </div>
+    `;
+    contribEl.appendChild(row);
+  });
+}
+
+// ---- run scan ----
+function runScan(){
+  const scaledAmount = (current.Amount - AMOUNT_MEAN) / AMOUNT_SCALE;
+  let z = INTERCEPT;
+  FEATURES.forEach(f => {
+    const x = f==='Amount' ? scaledAmount : current[f];
+    z += COEF[f]*x;
+  });
+
+  const isFraud = z >= Z_THRESHOLD;
+  const riskPct = Math.max(0, Math.min(100, (z - Z_MIN)/(Z_MAX - Z_MIN)*100));
+
+  const badge = document.getElementById('verdict-badge');
+  badge.textContent = isFraud ? 'Fraud' : 'Genuine';
+  badge.className = 'verdict-badge ' + (isFraud ? 'fraud' : 'genuine');
+
+  document.getElementById('gauge-score').textContent = `${riskPct.toFixed(0)} / 100`;
+  document.getElementById('gauge-marker').style.left = `${riskPct}%`;
+
+  buildContributions(current, z);
+  buildScatter(current);
+}
+
+document.getElementById('scan-btn').addEventListener('click', runScan);
+
+runScan();
+</script>
+</body>
+</html>
