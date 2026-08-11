@@ -21,6 +21,13 @@ Predicts advertising **Sales** from **TV**, **Radio**, and **Newspaper** spend a
 
 ## 🏗️ Architecture
 
+<div align="center">
+<img src="04-sales-architecture.svg" alt="Sales prediction animated architecture diagram" width="100%"/>
+</div>
+
+<details>
+<summary>Mermaid source (fallback / editable)</summary>
+
 ```mermaid
 flowchart LR
     A[("advertising.csv<br/>200 campaigns")] --> B[EDA & Correlation Analysis]
@@ -38,6 +45,8 @@ flowchart LR
     style H fill:#0f6b3a,color:#fff
     style K fill:#38ef7d,color:#000
 ```
+
+</details>
 
 ---
 

@@ -1,0 +1,89 @@
+<svg viewBox="0 0 1250 420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Iris Classification Architecture">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2b0f4a"/><stop offset="100%" stop-color="#6a3093"/>
+    </linearGradient>
+    
+  </defs>
+  <rect x="0" y="0" width="1250" height="420" rx="18" fill="url(#bg)"/>
+
+  <g id="n1">
+    <rect x="30" y="170" width="140" height="80" rx="14" fill="#6a3093"/>
+    <text x="100.0" y="204.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="100.0" dy="0">iris.csv</tspan><tspan x="100.0" dy="17" font-size="10" opacity="0.85">150 rows</tspan></text>
+  </g>
+  <g id="n2">
+    <rect x="210" y="170" width="150" height="80" rx="14" fill="#8b4bc4"/>
+    <text x="285.0" y="204.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="285.0" dy="0">EDA &amp; RF</tspan><tspan x="285.0" dy="17" font-size="10" opacity="0.85">Importance</tspan></text>
+  </g>
+  <g id="n3">
+    <rect x="400" y="170" width="170" height="80" rx="14" fill="#a044ff"/>
+    <text x="485.0" y="204.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="485.0" dy="0">6-Model</tspan><tspan x="485.0" dy="17" font-size="10" opacity="0.85">10-fold CV</tspan></text>
+  </g>
+  <g id="n4">
+    <rect x="610" y="170" width="160" height="80" rx="14" fill="#8b4bc4"/>
+    <text x="690.0" y="204.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="690.0" dy="0">Grid Search</tspan><tspan x="690.0" dy="17" font-size="10" opacity="0.85">Tuning</tspan></text>
+  </g>
+  <g id="n5">
+    <rect x="810" y="155" width="150" height="90" rx="14" fill="#0f6b3a"/>
+  <rect x="806" y="151" width="158" height="98" rx="18" fill="none" stroke="#0f6b3a" stroke-width="3" opacity="0.7">
+    <animate attributeName="stroke-opacity" values="1;0.15;1" dur="1.8s" repeatCount="indefinite"/>
+  </rect>
+    <text x="885.0" y="194.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="885.0" dy="0">Linear SVM</tspan><tspan x="885.0" dy="17" font-size="10" opacity="0.85">C=0.1  96.67%</tspan></text>
+  </g>
+  <g id="n6a">
+    <rect x="1000" y="60" width="220" height="70" rx="14" fill="#38ef7d"/>
+    <text x="1110.0" y="89.0" text-anchor="middle" fill="#1a0a2e" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="1110.0" dy="0">iris_classifier_demo.html</tspan><tspan x="1110.0" dy="17" font-size="10" opacity="0.85">live illustration</tspan></text>
+  </g>
+  <g id="n6b">
+    <rect x="1000" y="270" width="220" height="70" rx="14" fill="#e0aaff"/>
+    <text x="1110.0" y="299.0" text-anchor="middle" fill="#1a0a2e" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="1110.0" dy="0">streamlit_app.py</tspan><tspan x="1110.0" dy="17" font-size="10" opacity="0.85">full dashboard</tspan></text>
+  </g>
+  <path id="path_1" d="M 170 210 L 210 210" stroke="#d9b3ff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#d9b3ff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_1"/>
+    </animateMotion>
+  </circle>
+  <path id="path_2" d="M 360 210 L 400 210" stroke="#d9b3ff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#d9b3ff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_2"/>
+    </animateMotion>
+  </circle>
+  <path id="path_3" d="M 570 210 L 610 210" stroke="#d9b3ff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#d9b3ff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_3"/>
+    </animateMotion>
+  </circle>
+  <path id="path_4" d="M 770 210 L 810 200" stroke="#d9b3ff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#d9b3ff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_4"/>
+    </animateMotion>
+  </circle>
+  <path id="path_5a" d="M 960 195 L 1000 105" stroke="#4ade80" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#4ade80">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_5a"/>
+    </animateMotion>
+  </circle>
+  <path id="path_5b" d="M 960 225 L 1000 295" stroke="#e0aaff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#e0aaff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_5b"/>
+    </animateMotion>
+  </circle>
+</svg>

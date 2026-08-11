@@ -27,6 +27,13 @@ Predicts whether a passenger aboard the Titanic survived, using the classic Tita
 
 ## 🏗️ Architecture
 
+<div align="center">
+<img src="05-titanic-architecture.svg" alt="Titanic survival prediction animated architecture diagram" width="100%"/>
+</div>
+
+<details>
+<summary>Mermaid source (fallback / editable)</summary>
+
 ```mermaid
 flowchart LR
     A[("Titanic-Dataset.csv")] --> B[Data Cleaning<br/>missing values, drop irrelevant cols]
@@ -45,6 +52,8 @@ flowchart LR
     style H fill:#0f6b3a,color:#fff
     style J fill:#26d0ce,color:#000
 ```
+
+</details>
 
 ---
 

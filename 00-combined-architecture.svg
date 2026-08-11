@@ -1,0 +1,257 @@
+<svg viewBox="0 0 1200 560" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="ML Portfolio Combined Architecture">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f14"/><stop offset="50%" stop-color="#141e30"/><stop offset="100%" stop-color="#0f6b3a"/>
+    </linearGradient>
+    
+  </defs>
+  <rect x="0" y="0" width="1200" height="560" rx="18" fill="url(#bg)"/>
+
+  <g id="hub">
+    <rect x="950" y="220" width="210" height="120" rx="14" fill="#38ef7d"/>
+  <rect x="946" y="216" width="218" height="128" rx="18" fill="none" stroke="#38ef7d" stroke-width="3" opacity="0.7">
+    <animate attributeName="stroke-opacity" values="1;0.15;1" dur="1.8s" repeatCount="indefinite"/>
+  </rect>
+    <text x="1055.0" y="264.0" text-anchor="middle" fill="#062a1c" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="1055.0" dy="0">ML Project</tspan><tspan x="1055.0" dy="15">Portfolio</tspan><tspan x="1055.0" dy="17" font-size="10" opacity="0.85">Portfolio</tspan></text>
+  </g>
+  <g id="proj_40">
+    <rect x="30" y="40" width="190" height="70" rx="14" fill="#1e3c72"/>
+    <text x="125.0" y="77.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="125.0" dy="0">Fraud Detection</tspan></text>
+  </g>
+  <g id="data_40">
+    <rect x="260" y="40" width="170" height="70" rx="14" fill="#2a2f3a"/>
+    <text x="345.0" y="77.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="345.0" dy="0">creditcard.csv</tspan></text>
+  </g>
+  <g id="model_40">
+    <rect x="470" y="40" width="190" height="70" rx="14" fill="#334"/>
+    <text x="565.0" y="77.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="565.0" dy="0">Logistic Reg. / RF</tspan></text>
+  </g>
+  <g id="ui_40">
+    <rect x="700" y="40" width="220" height="70" rx="14" fill="#264d4a"/>
+    <text x="810.0" y="77.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="810.0" dy="0">console.html</tspan></text>
+  </g>
+  <path id="path_a40" d="M 220 75 L 260 75" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_a40"/>
+    </animateMotion>
+  </circle>
+  <path id="path_b40" d="M 430 75 L 470 75" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_b40"/>
+    </animateMotion>
+  </circle>
+  <path id="path_c40" d="M 660 75 L 700 75" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_c40"/>
+    </animateMotion>
+  </circle>
+  <path id="path_d40" d="M 920 75 L 950 280" stroke="#38ef7d" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#38ef7d">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#path_d40"/>
+    </animateMotion>
+  </circle>
+  <g id="proj_140">
+    <rect x="30" y="140" width="190" height="70" rx="14" fill="#6a3093"/>
+    <text x="125.0" y="177.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="125.0" dy="0">Iris Classifier</tspan></text>
+  </g>
+  <g id="data_140">
+    <rect x="260" y="140" width="170" height="70" rx="14" fill="#2a2f3a"/>
+    <text x="345.0" y="177.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="345.0" dy="0">iris.csv</tspan></text>
+  </g>
+  <g id="model_140">
+    <rect x="470" y="140" width="190" height="70" rx="14" fill="#334"/>
+    <text x="565.0" y="177.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="565.0" dy="0">Linear SVM</tspan></text>
+  </g>
+  <g id="ui_140">
+    <rect x="700" y="140" width="220" height="70" rx="14" fill="#264d4a"/>
+    <text x="810.0" y="177.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="810.0" dy="0">demo.html + Streamlit</tspan></text>
+  </g>
+  <path id="path_a140" d="M 220 175 L 260 175" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_a140"/>
+    </animateMotion>
+  </circle>
+  <path id="path_b140" d="M 430 175 L 470 175" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_b140"/>
+    </animateMotion>
+  </circle>
+  <path id="path_c140" d="M 660 175 L 700 175" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_c140"/>
+    </animateMotion>
+  </circle>
+  <path id="path_d140" d="M 920 175 L 950 280" stroke="#38ef7d" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#38ef7d">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#path_d140"/>
+    </animateMotion>
+  </circle>
+  <g id="proj_240">
+    <rect x="30" y="240" width="190" height="70" rx="14" fill="#0f2027"/>
+    <text x="125.0" y="277.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="125.0" dy="0">Movie Ratings</tspan></text>
+  </g>
+  <g id="data_240">
+    <rect x="260" y="240" width="170" height="70" rx="14" fill="#2a2f3a"/>
+    <text x="345.0" y="277.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="345.0" dy="0">IMDb India.csv</tspan></text>
+  </g>
+  <g id="model_240">
+    <rect x="470" y="240" width="190" height="70" rx="14" fill="#334"/>
+    <text x="565.0" y="277.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="565.0" dy="0">XGBoost (tuned)</tspan></text>
+  </g>
+  <g id="ui_240">
+    <rect x="700" y="240" width="220" height="70" rx="14" fill="#264d4a"/>
+    <text x="810.0" y="277.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="810.0" dy="0">Flask + 3D UI</tspan></text>
+  </g>
+  <path id="path_a240" d="M 220 275 L 260 275" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_a240"/>
+    </animateMotion>
+  </circle>
+  <path id="path_b240" d="M 430 275 L 470 275" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_b240"/>
+    </animateMotion>
+  </circle>
+  <path id="path_c240" d="M 660 275 L 700 275" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_c240"/>
+    </animateMotion>
+  </circle>
+  <path id="path_d240" d="M 920 275 L 950 280" stroke="#38ef7d" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#38ef7d">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#path_d240"/>
+    </animateMotion>
+  </circle>
+  <g id="proj_340">
+    <rect x="30" y="340" width="190" height="70" rx="14" fill="#11998e"/>
+    <text x="125.0" y="377.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="125.0" dy="0">Sales Prediction</tspan></text>
+  </g>
+  <g id="data_340">
+    <rect x="260" y="340" width="170" height="70" rx="14" fill="#2a2f3a"/>
+    <text x="345.0" y="377.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="345.0" dy="0">advertising.csv</tspan></text>
+  </g>
+  <g id="model_340">
+    <rect x="470" y="340" width="190" height="70" rx="14" fill="#334"/>
+    <text x="565.0" y="377.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="565.0" dy="0">Polynomial Reg.</tspan></text>
+  </g>
+  <g id="ui_340">
+    <rect x="700" y="340" width="220" height="70" rx="14" fill="#264d4a"/>
+    <text x="810.0" y="377.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="810.0" dy="0">sales_lab.html</tspan></text>
+  </g>
+  <path id="path_a340" d="M 220 375 L 260 375" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_a340"/>
+    </animateMotion>
+  </circle>
+  <path id="path_b340" d="M 430 375 L 470 375" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_b340"/>
+    </animateMotion>
+  </circle>
+  <path id="path_c340" d="M 660 375 L 700 375" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_c340"/>
+    </animateMotion>
+  </circle>
+  <path id="path_d340" d="M 920 375 L 950 280" stroke="#38ef7d" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#38ef7d">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#path_d340"/>
+    </animateMotion>
+  </circle>
+  <g id="proj_440">
+    <rect x="30" y="440" width="190" height="70" rx="14" fill="#1a2980"/>
+    <text x="125.0" y="477.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="125.0" dy="0">Titanic Survival</tspan></text>
+  </g>
+  <g id="data_440">
+    <rect x="260" y="440" width="170" height="70" rx="14" fill="#2a2f3a"/>
+    <text x="345.0" y="477.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="345.0" dy="0">Titanic.csv</tspan></text>
+  </g>
+  <g id="model_440">
+    <rect x="470" y="440" width="190" height="70" rx="14" fill="#334"/>
+    <text x="565.0" y="477.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="565.0" dy="0">Stacking Ensemble</tspan></text>
+  </g>
+  <g id="ui_440">
+    <rect x="700" y="440" width="220" height="70" rx="14" fill="#264d4a"/>
+    <text x="810.0" y="477.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="810.0" dy="0">bar-chart viz</tspan></text>
+  </g>
+  <path id="path_a440" d="M 220 475 L 260 475" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_a440"/>
+    </animateMotion>
+  </circle>
+  <path id="path_b440" d="M 430 475 L 470 475" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_b440"/>
+    </animateMotion>
+  </circle>
+  <path id="path_c440" d="M 660 475 L 700 475" stroke="#a0f0d0" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#a0f0d0">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_c440"/>
+    </animateMotion>
+  </circle>
+  <path id="path_d440" d="M 920 475 L 950 280" stroke="#38ef7d" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#38ef7d">
+    <animateMotion dur="2s" repeatCount="indefinite">
+      <mpath href="#path_d440"/>
+    </animateMotion>
+  </circle>
+</svg>

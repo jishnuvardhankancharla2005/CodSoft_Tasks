@@ -21,6 +21,13 @@ Predicts whether a movie will be **High-Rated** (IMDb rating ≥ 6.5) using only
 
 ## 🏗️ Architecture
 
+<div align="center">
+<img src="03-movie-rating-architecture.svg" alt="Movie rating prediction animated architecture diagram" width="100%"/>
+</div>
+
+<details>
+<summary>Mermaid source (fallback / editable)</summary>
+
 ```mermaid
 flowchart LR
     A[("IMDb Movies India.csv<br/>15,509 films")] --> B["clean.py<br/>parse Year/Votes/Duration"]
@@ -41,6 +48,8 @@ flowchart LR
     style L fill:#2c5364,color:#fff
     style M fill:#2c5364,color:#fff
 ```
+
+</details>
 
 ---
 

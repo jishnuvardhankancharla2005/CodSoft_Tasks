@@ -21,6 +21,13 @@ A fraud-detection pipeline trained on **284,807 real anonymized transactions**, 
 
 ## 🏗️ Architecture
 
+<div align="center">
+<img src="01-fraud-architecture.svg" alt="Fraud detection animated architecture diagram" width="100%"/>
+</div>
+
+<details>
+<summary>Mermaid source (fallback / editable)</summary>
+
 ```mermaid
 flowchart LR
     A[("creditcard.csv<br/>284,807 rows")] --> B[EDA & Feature Ranking]
@@ -36,6 +43,8 @@ flowchart LR
     style H fill:#2a5298,color:#fff
     style F fill:#0f6b3a,color:#fff
 ```
+
+</details>
 
 > The Logistic Regression model is the one deployed to the dashboard — its coefficients are simple enough to embed directly in JavaScript, coming within a hair of the Random Forest's accuracy without needing a server.
 

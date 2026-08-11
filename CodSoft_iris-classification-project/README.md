@@ -21,6 +21,13 @@ Classify Iris flowers into **setosa**, **versicolor**, or **virginica** from fou
 
 ## 🏗️ Architecture
 
+<div align="center">
+<img src="02-iris-architecture.svg" alt="Iris classification animated architecture diagram" width="100%"/>
+</div>
+
+<details>
+<summary>Mermaid source (fallback / editable)</summary>
+
 ```mermaid
 flowchart LR
     A[("iris.csv<br/>150 rows")] --> B[EDA + Pairplots]
@@ -37,6 +44,8 @@ flowchart LR
     style H fill:#a044ff,color:#fff
     style I fill:#a044ff,color:#fff
 ```
+
+</details>
 
 ---
 

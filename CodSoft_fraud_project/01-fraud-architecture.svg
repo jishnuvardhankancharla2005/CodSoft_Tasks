@@ -1,0 +1,109 @@
+<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Fraud Detection Architecture">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1b3a"/><stop offset="100%" stop-color="#1e3c72"/>
+    </linearGradient>
+    
+  </defs>
+  <rect x="0" y="0" width="1200" height="420" rx="18" fill="url(#bg)"/>
+
+  <g id="n1">
+    <rect x="30" y="170" width="150" height="80" rx="14" fill="#1e3c72"/>
+    <text x="105.0" y="204.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="105.0" dy="0">creditcard.csv</tspan><tspan x="105.0" dy="17" font-size="10" opacity="0.85">284,807 rows</tspan></text>
+  </g>
+  <g id="n2">
+    <rect x="230" y="170" width="150" height="80" rx="14" fill="#2a5298"/>
+    <text x="305.0" y="204.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="305.0" dy="0">EDA &amp; Feature</tspan><tspan x="305.0" dy="17" font-size="10" opacity="0.85">Ranking (30 to 10)</tspan></text>
+  </g>
+  <g id="n3a">
+    <rect x="430" y="60" width="170" height="70" rx="14" fill="#0f6b3a"/>
+    <text x="515.0" y="89.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="515.0" dy="0">class_weight</tspan><tspan x="515.0" dy="17" font-size="10" opacity="0.85">balanced (winner)</tspan></text>
+  </g>
+  <g id="n3b">
+    <rect x="430" y="260" width="170" height="70" rx="14" fill="#5a3a1e"/>
+    <text x="515.0" y="289.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="515.0" dy="0">3:1 Undersample</tspan><tspan x="515.0" dy="17" font-size="10" opacity="0.85">(discarded)</tspan></text>
+  </g>
+  <g id="n4a">
+    <rect x="650" y="60" width="160" height="70" rx="14" fill="#0f6b3a"/>
+    <text x="730.0" y="97.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="730.0" dy="0">Logistic Regression</tspan></text>
+  </g>
+  <g id="n4b">
+    <rect x="650" y="260" width="160" height="70" rx="14" fill="#3a3a5e"/>
+    <text x="730.0" y="289.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="730.0" dy="0">Random Forest</tspan><tspan x="730.0" dy="17" font-size="10" opacity="0.85">AUC 0.977</tspan></text>
+  </g>
+  <g id="n5">
+    <rect x="850" y="160" width="160" height="90" rx="14" fill="#2a5298"/>
+    <text x="930.0" y="197.0" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="930.0" dy="0">Evaluate and</tspan><tspan x="930.0" dy="15">Export COEF</tspan></text>
+  </g>
+  <g id="n6">
+    <rect x="1040" y="155" width="130" height="90" rx="14" fill="#38ef7d"/>
+  <rect x="1036" y="151" width="138" height="98" rx="18" fill="none" stroke="#38ef7d" stroke-width="3" opacity="0.7">
+    <animate attributeName="stroke-opacity" values="1;0.15;1" dur="1.8s" repeatCount="indefinite"/>
+  </rect>
+    <text x="1105.0" y="194.0" text-anchor="middle" fill="#08321a" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600"><tspan x="1105.0" dy="0">fraud_console.html</tspan><tspan x="1105.0" dy="17" font-size="10" opacity="0.85">live scoring</tspan></text>
+  </g>
+  <path id="path_1" d="M 180 210 L 230 210" stroke="#8fb8ff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#8fb8ff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_1"/>
+    </animateMotion>
+  </circle>
+  <path id="path_2a" d="M 380 195 L 430 95" stroke="#8fb8ff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#8fb8ff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_2a"/>
+    </animateMotion>
+  </circle>
+  <path id="path_2b" d="M 380 225 L 430 295" stroke="#8fb8ff" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#8fb8ff">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_2b"/>
+    </animateMotion>
+  </circle>
+  <path id="path_3a" d="M 600 95 L 650 95" stroke="#4ade80" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#4ade80">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_3a"/>
+    </animateMotion>
+  </circle>
+  <path id="path_3b" d="M 600 295 L 650 295" stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#94a3b8">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_3b"/>
+    </animateMotion>
+  </circle>
+  <path id="path_4a" d="M 810 95 L 870 180" stroke="#4ade80" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#4ade80">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_4a"/>
+    </animateMotion>
+  </circle>
+  <path id="path_4b" d="M 810 295 L 870 230" stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#94a3b8">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_4b"/>
+    </animateMotion>
+  </circle>
+  <path id="path_5" d="M 1010 200 L 1040 200" stroke="#38ef7d" stroke-width="2" fill="none" stroke-dasharray="6 5" opacity="0.55">
+    <animate attributeName="stroke-dashoffset" from="0" to="-22" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+  <circle r="4" fill="#38ef7d">
+    <animateMotion dur="1.6s" repeatCount="indefinite">
+      <mpath href="#path_5"/>
+    </animateMotion>
+  </circle>
+</svg>
