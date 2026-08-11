@@ -1,6 +1,6 @@
 """
 Iris Species Classifier — Streamlit App
-CodeAlpha Internship Project
+CodSoft Internship Project
 
 Run with:  streamlit run app/streamlit_app.py
 """
